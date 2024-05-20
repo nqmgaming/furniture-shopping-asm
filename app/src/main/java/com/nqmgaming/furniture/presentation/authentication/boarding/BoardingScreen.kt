@@ -1,4 +1,4 @@
-package com.nqmgaming.furniture.presentation.boarding
+package com.nqmgaming.furniture.presentation.authentication.boarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
