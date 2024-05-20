@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Furniture Shopping</string>
+    <string name="make_your">Make your</string>
+    <string name="home_beautiful">home beautiful</string>
+    <string name="intro">The best simple place where you discover most wonderful furnitures and make your home beautiful</string>
+    <string name="get_started">Get Started</string>
+    <string name="hello">Hello !</string>
+    <string name="welcome_back">Welcome Back</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="sign_up">Sign up</string>
+    <string name="name">Name</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="log_in">Log in</string>
+    <string name="already_have_an_account">Already have account?</string>
+</resources>
