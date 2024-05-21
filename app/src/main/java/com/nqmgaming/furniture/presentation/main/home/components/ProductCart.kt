@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.domain.model.product.Product
+import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.GreyText
 import com.nqmgaming.furniture.ui.theme.WhiteText
@@ -41,6 +42,7 @@ fun ProductCart(
     modifier: Modifier = Modifier,
     product: Product,
     onAddToCart: (Product) -> Unit,
+    onProductClick: (Product) -> Unit = {},
     navController: NavController
 ) {
     Column {
@@ -50,16 +52,16 @@ fun ProductCart(
                     Color.White,
                     shape = RoundedCornerShape(10.dp)
                 )
-            // Todo
-//                .clickable { navController.navigate("product/${product.productId}") }
-            ,
+                .clickable {
+                    onProductClick(product)
+                },
             contentAlignment = Alignment.CenterStart
         ) {
             AsyncImage(
                 model = product.images.first(),
                 contentDescription = product.name,
                 modifier = Modifier
-                    .height(200.dp)
+                    .height(250.dp)
                     .width(160.dp)
                     .clip(RoundedCornerShape(10.dp)),
                 contentScale = ContentScale.Crop,

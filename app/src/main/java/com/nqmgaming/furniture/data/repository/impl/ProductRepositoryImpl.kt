@@ -3,6 +3,7 @@ package com.nqmgaming.furniture.data.repository.impl
 import com.nqmgaming.furniture.data.network.dto.ProductDto
 import com.nqmgaming.furniture.data.repository.ProductRepository
 import io.github.jan.supabase.postgrest.Postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.storage.Storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,7 +17,8 @@ class ProductRepositoryImpl @Inject constructor(
         return try {
             withContext(Dispatchers.IO) {
                 val result = postgrest.from("Products")
-                    .select().decodeList<ProductDto>()
+                    .select(columns = Columns.list("product_id", "name", "price", "image_list"))
+                    .decodeList<ProductDto>()
                 result
             }
         } catch (e: Exception) {

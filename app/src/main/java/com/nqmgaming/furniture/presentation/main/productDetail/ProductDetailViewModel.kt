@@ -1,5 +1,6 @@
-package com.nqmgaming.furniture.presentation.main.home
+package com.nqmgaming.furniture.presentation.main.productDetail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nqmgaming.furniture.data.repository.ProductRepository
@@ -12,25 +13,23 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
-    private val productRepository: ProductRepository
-):ViewModel() {
-    private val _productList = MutableStateFlow<List<Product>?>(listOf())
-    val productList: Flow<List<Product>?> = _productList
+class ProductDetailViewModel @Inject constructor(
+    private val productRepository: ProductRepository,
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+    private val _product = MutableStateFlow<Product?>(null)
+    val product = _product
+
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: Flow<Boolean> = _isLoading
 
     init {
-        getProducts()
-    }
-
-    fun getProducts(){
+        val productId = savedStateHandle.get<Int>("productId")
         viewModelScope.launch {
-            val products = productRepository.getProducts()
-            _productList.emit(products.map {
-                it -> it.asDomainModel()
-            })
+            val result = productRepository.getProductById(productId!!).asDomainModel()
+            _product.emit(result)
         }
     }
 }

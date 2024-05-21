@@ -26,4 +26,5 @@
     <string name="make_home">Make home</string>
     <string name="beautiful">Beautiful</string>
     <string name="add_to_cart">Add to cart</string>
+    <string name="no_products_found">No products found in this category</string>
 </resources>
