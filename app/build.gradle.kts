@@ -71,5 +71,9 @@ dependencies {
     implementation (libs.androidx.material.icons.extended)
 
     // Lottie
-    implementation("com.airbnb.android:lottie-compose:6.4.0")
+    implementation(libs.lottie.compose)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
 }

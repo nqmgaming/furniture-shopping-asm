@@ -44,8 +44,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.common.components.CustomTextField
+import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.GreyLight
 import com.nqmgaming.furniture.ui.theme.GreyText
@@ -57,7 +59,7 @@ import com.nqmgaming.furniture.ui.theme.nunitoSansBoldFont
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 
 @Composable
-fun SignUpScreen() {
+fun SignUpScreen(navController: NavController) {
     var name by remember {
         mutableStateOf("")
     }
@@ -215,7 +217,7 @@ fun SignUpScreen() {
                     modifier = Modifier.padding(vertical = 20.dp)
                 )
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate(Screen.SplashScreen.route) },
                     modifier = Modifier
                         .width(280.dp)
                         .height(50.dp),
@@ -244,7 +246,7 @@ fun SignUpScreen() {
                 }
 
                 TextButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.popBackStack() },
                     modifier = Modifier.padding(vertical = 20.dp)
                 ) {
                     Text(
@@ -282,10 +284,4 @@ fun SignUpScreen() {
         }
 
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun SignUpPreview() {
-    SignUpScreen()
 }

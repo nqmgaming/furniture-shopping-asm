@@ -4,15 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.nqmgaming.furniture.presentation.authentication.login.LoginScreen
+import androidx.compose.material3.Surface
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.nqmgaming.furniture.navigation.appGraph
+import com.nqmgaming.furniture.navigation.authGraph
+import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.FurnitureShoppingTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +19,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FurnitureShoppingTheme {
-                LoginScreen()
+                Surface {
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = Screen.AuthRoute.route
+                    ) {
+                        authGraph(navController = navController)
+                        appGraph(navController = navController)
+                    }
+                }
             }
         }
     }

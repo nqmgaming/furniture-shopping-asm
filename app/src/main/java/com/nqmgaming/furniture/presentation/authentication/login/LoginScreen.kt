@@ -40,8 +40,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.common.components.CustomTextField
+import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.GreyLight
 import com.nqmgaming.furniture.ui.theme.LineColor
@@ -51,7 +53,7 @@ import com.nqmgaming.furniture.ui.theme.merriweatherFont
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
     var email by remember {
         mutableStateOf("")
     }
@@ -170,7 +172,8 @@ fun LoginScreen() {
                     modifier = Modifier.padding(vertical = 20.dp)
                 )
                 Button(
-                    onClick = { /*TODO*/ },
+                    // TODO: Check if the email and password are correct
+                    onClick = { navController.navigate(Screen.SplashScreen.route) },
                     modifier = Modifier
                         .width(280.dp)
                         .height(50.dp),
@@ -198,7 +201,9 @@ fun LoginScreen() {
                     )
                 }
 
-                TextButton(onClick = { /*TODO*/ }, modifier = Modifier.padding(vertical = 20.dp)) {
+                TextButton(onClick = {
+                    navController.navigate(Screen.SignUpScreen.route)
+                }, modifier = Modifier.padding(vertical = 20.dp)) {
                     Text(
                         text = stringResource(id = R.string.sign_up).uppercase(),
                         style = TextStyle(
@@ -217,10 +222,4 @@ fun LoginScreen() {
         }
 
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun LoginScreenPreview() {
-    LoginScreen()
 }

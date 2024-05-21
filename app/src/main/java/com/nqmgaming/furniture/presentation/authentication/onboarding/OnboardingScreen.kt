@@ -1,4 +1,4 @@
-package com.nqmgaming.furniture.presentation.authentication.boarding
+package com.nqmgaming.furniture.presentation.authentication.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,14 +20,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontVariation
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
+import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.GreyText
 import com.nqmgaming.furniture.ui.theme.GreyTileText
@@ -37,7 +37,7 @@ import com.nqmgaming.furniture.ui.theme.gelasioFont
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 
 @Composable
-fun BoardingScreen() {
+fun OnboardingScreen(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.boarding_bg),
@@ -91,7 +91,9 @@ fun BoardingScreen() {
                 horizontalArrangement = Arrangement.Center
             ) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController.navigate(Screen.LoginScreen.route)
+                    },
                     modifier = Modifier
                         .width(200.dp)
                         .height(54.dp),
@@ -121,10 +123,4 @@ fun BoardingScreen() {
             }
         }
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun BoardingScreenPreview() {
-    BoardingScreen()
 }
