@@ -1,6 +1,12 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-parcelize")
+    kotlin("plugin.serialization")
+    id("com.google.devtools.ksp")
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -18,6 +24,15 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        // Set value part
+
+        val versionProps = Properties()
+        versionProps.load(project.rootProject.file("local.properties").inputStream())
+
+        buildConfigField("String", "SUPABASE_ANON_KEY", versionProps["SUPABASE_ANON_KEY"].toString())
+        buildConfigField("String", "SECRET", versionProps["SECRET"].toString())
+        buildConfigField("String", "SUPABASE_URL", versionProps["SUPABASE_URL"].toString())
     }
 
     buildTypes {
@@ -38,6 +53,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -68,12 +84,43 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // Material 3 extended library
-    implementation (libs.androidx.material.icons.extended)
+    implementation(libs.androidx.material.icons.extended)
 
     // Lottie
     implementation(libs.lottie.compose)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)
+
+    // Superbase
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.4.2")
+    implementation("io.github.jan-tennert.supabase:storage-kt:2.4.2")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.4.2")
+    implementation("io.ktor:ktor-client-android:2.3.1")
+    implementation("io.ktor:ktor-client-core:2.3.1")
+    implementation("io.ktor:ktor-utils:2.3.1")
+
+
+    // Serialization
+    val serialization = "1.6.0"
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:$serialization")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-okio:$serialization")
+
+    // https://coil-kt.github.io/coil/changelog/
+    implementation(platform("io.coil-kt:coil-bom:2.4.0"))
+    implementation("io.coil-kt:coil-compose")
+    implementation("io.coil-kt:coil-gif")
+
+    // Hilt
+    implementation(libs.hilt.android)
+    implementation(libs.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.work)
+
+    implementation("androidx.work:work-runtime:2.7.1")
+
+    implementation("org.slf4j:slf4j-api:1.6.1")
+    implementation("org.slf4j:slf4j-simple:1.6.1")
 
 }

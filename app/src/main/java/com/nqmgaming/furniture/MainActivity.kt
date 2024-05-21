@@ -11,9 +11,14 @@ import com.nqmgaming.furniture.navigation.appGraph
 import com.nqmgaming.furniture.navigation.authGraph
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.FurnitureShoppingTheme
+import dagger.hilt.android.AndroidEntryPoint
+import io.github.jan.supabase.SupabaseClient
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var supabaseClient: SupabaseClient
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

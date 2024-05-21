@@ -84,7 +84,7 @@ fun MainScreen() {
         ) {
             composable(Screen.HomeScreen.route) {
                 HomeScreen(
-                    navController
+                    navController = navController,
                 )
             }
             composable(Screen.FavoritesScreen.route) {

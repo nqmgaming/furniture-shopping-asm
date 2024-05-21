@@ -21,4 +21,8 @@
     <string name="favorites">Favorites</string>
     <string name="notifications">Notifications</string>
     <string name="profile">Profile\n</string>
+    <string name="search">Search</string>
+    <string name="cart">Cart</string>
+    <string name="make_home">Make home</string>
+    <string name="beautiful">Beautiful</string>
 </resources>
