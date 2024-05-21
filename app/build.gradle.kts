@@ -93,19 +93,20 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     // Superbase
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:2.4.2")
-    implementation("io.github.jan-tennert.supabase:storage-kt:2.4.2")
-    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.4.2")
-    implementation("io.ktor:ktor-client-android:2.3.1")
-    implementation("io.ktor:ktor-client-core:2.3.1")
-    implementation("io.ktor:ktor-utils:2.3.1")
+    implementation(libs.postgrest.kt)
+    implementation(libs.storage.kt)
+    implementation(libs.gotrue.kt)
+
+    // Ktor
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.utils)
 
 
     // Serialization
-    val serialization = "1.6.0"
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:$serialization")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-okio:$serialization")
+    implementation(libs.kotlinx.serialization.cbor)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.serialization.json.okio)
 
     // https://coil-kt.github.io/coil/changelog/
     implementation(platform("io.coil-kt:coil-bom:2.4.0"))
@@ -118,9 +119,10 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.hilt.work)
 
-    implementation("androidx.work:work-runtime:2.7.1")
+    // WorkManager
+    implementation(libs.androidx.work.runtime)
 
-    implementation("org.slf4j:slf4j-api:1.6.1")
-    implementation("org.slf4j:slf4j-simple:1.6.1")
+    implementation(libs.slf4j.api)
+    implementation(libs.slf4j.simple)
 
 }
