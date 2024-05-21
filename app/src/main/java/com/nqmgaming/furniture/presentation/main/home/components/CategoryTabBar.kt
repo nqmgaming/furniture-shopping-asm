@@ -35,11 +35,11 @@ import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 
 @Composable
 fun CategoryTabBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    selectCategory: Int = 0,
+    onChangeSelected: (Int) -> Unit = {}
 ) {
-    var selectCategory by remember {
-        mutableIntStateOf(0)
-    }
+
     Row(
         modifier = modifier.horizontalScroll(rememberScrollState())
     ) {
@@ -47,7 +47,7 @@ fun CategoryTabBar(
             CategoryItems(
                 category = category,
                 onChangeSelected = {
-                    selectCategory = index
+                    onChangeSelected(index)
                 },
                 selected = selectCategory == index
             )
@@ -118,7 +118,7 @@ private fun CategoryItems(
 
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, device = "spec:parent=pixel_5,orientation=landscape")
 @Composable
 fun CategoryTabBarPreview() {
     CategoryTabBar()

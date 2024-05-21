@@ -3,16 +3,23 @@ package com.nqmgaming.furniture.presentation.main.home
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -31,6 +38,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.presentation.main.home.components.CategoryTabBar
+import com.nqmgaming.furniture.presentation.main.home.components.ProductCart
 import com.nqmgaming.furniture.ui.theme.GreyLight
 import com.nqmgaming.furniture.ui.theme.PrimaryColor
 import com.nqmgaming.furniture.ui.theme.gelasioFont
@@ -45,6 +53,9 @@ fun HomeScreen(
 
     val isLoading by viewModel.isLoading.collectAsState(initial = false)
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    var categorySelect by rememberSaveable {
+        mutableIntStateOf(0)
+    }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { source, event ->
@@ -63,7 +74,8 @@ fun HomeScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
             modifier = Modifier
@@ -116,15 +128,58 @@ fun HomeScreen(
                     .padding(5.dp)
             )
         }
-        CategoryTabBar(modifier = Modifier.padding(start = 16.dp))
-        Column {
+
+        CategoryTabBar(
+            modifier = Modifier
+                .padding(start = 16.dp),
+            onChangeSelected = {
+                categorySelect = it
+            })
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             val productList = viewModel.productList.collectAsState(initial = listOf()).value
             Log.d("HomeScreen", "ProductList: $productList")
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                horizontalArrangement = Arrangement.Center,
+                contentPadding = PaddingValues(start = 30.dp, end = 0.dp)
+            ) {
+                if (categorySelect == 0) {
+                    productList?.forEach { product ->
+                        item {
+                            ProductCart(
+                                product = product,
+                                onAddToCart = {
+                                },
+                                navController = navController
+                            )
+                        }
+                    }
+                } else {
+                    productList?.filter {
+                        it.categoryId == categorySelect
+                    }?.forEach { product ->
+                        item {
+                            ProductCart(
+                                product = product,
+                                onAddToCart = {
+                                },
+                                navController = navController
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, device = "spec:parent=pixel_5,orientation=landscape")
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(navController = rememberNavController())

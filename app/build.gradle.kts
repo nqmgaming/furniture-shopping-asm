@@ -109,9 +109,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json.okio)
 
     // https://coil-kt.github.io/coil/changelog/
-    implementation(platform("io.coil-kt:coil-bom:2.4.0"))
-    implementation("io.coil-kt:coil-compose")
-    implementation("io.coil-kt:coil-gif")
+    implementation("io.coil-kt:coil-compose:2.6.0")
 
     // Hilt
     implementation(libs.hilt.android)
