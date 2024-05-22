@@ -11,6 +11,7 @@ import com.nqmgaming.furniture.navigation.appGraph
 import com.nqmgaming.furniture.navigation.authGraph
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.FurnitureShoppingTheme
+import com.nqmgaming.furniture.util.SharedPrefUtils
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jan.supabase.SupabaseClient
 import javax.inject.Inject
@@ -24,11 +25,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             FurnitureShoppingTheme {
+                val isLogin = SharedPrefUtils.getBoolean(this@MainActivity, "isLogin", false)
+                val starrDestination = if (isLogin) {
+                    Screen.AppRoute.route
+                } else {
+                    Screen.AuthRoute.route
+                }
                 Surface {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.AuthRoute.route
+                        startDestination = starrDestination
                     ) {
                         authGraph(navController = navController)
                         appGraph(navController = navController)
@@ -36,5 +43,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+
+
+
     }
 }

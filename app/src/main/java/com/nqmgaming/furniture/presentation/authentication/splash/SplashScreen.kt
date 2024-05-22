@@ -47,10 +47,12 @@ fun SplashScreen(
     LaunchedEffect(key1 = true) {
         viewModel.getProducts()
         delay(3000)
-        navController.navigate(Screen.HomeScreen.route) {
-            popUpTo(Screen.SplashScreen.route) { inclusive = true }
-            launchSingleTop = true
-            restoreState = true
+        withContext(Dispatchers.Main) {
+            navController.navigate(Screen.MainScreen.route) {
+                popUpTo(Screen.SplashScreen.route) { inclusive = true }
+                launchSingleTop = true
+                restoreState = true
+            }
         }
     }
 }

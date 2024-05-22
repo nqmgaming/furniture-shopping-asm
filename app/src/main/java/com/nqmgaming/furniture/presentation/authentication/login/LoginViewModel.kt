@@ -144,7 +144,7 @@ class LoginViewModel @Inject constructor(
                             Log.d("LoginViewModel", "Login Failed")
                             _message.value = "Login Failed"
                             _errorDetails.value = "Email or password is incorrect"
-                            _passwordError.value = "Password is incorrect"
+                            _emailError.value = "Email is not registered"
                         }
                     }
 

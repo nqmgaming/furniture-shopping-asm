@@ -1,6 +1,9 @@
 package com.nqmgaming.furniture.presentation.main
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -32,8 +35,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,6 +47,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -54,12 +60,15 @@ import com.nqmgaming.furniture.presentation.main.favorite.FavoriteScreen
 import com.nqmgaming.furniture.presentation.main.home.HomeScreen
 import com.nqmgaming.furniture.presentation.main.notification.NotificationScreen
 import com.nqmgaming.furniture.presentation.main.profile.ProfileScreen
+import com.nqmgaming.furniture.util.TwiceBackHandler
+import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
     navController: NavController,
 ) {
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -67,35 +76,36 @@ fun MainScreen(
                 screens = BottomNavigationItem().bottomNavigationItems(),
                 navController = navController
             )
+        },
+        content = {
+            NavHost(
+                navController = rememberNavController(),
+                startDestination = Screen.HomeScreen.route,
+                modifier = Modifier.padding(paddingValues = it)
+            ) {
+                composable(Screen.HomeScreen.route) {
+                    HomeScreen(
+                        navController = navController,
+                    )
+                }
+                composable(Screen.FavoritesScreen.route) {
+                    FavoriteScreen(
+                        navController
+                    )
+                }
+                composable(Screen.NotificationsScreen.route) {
+                    NotificationScreen(
+                        navController
+                    )
+                }
+                composable(Screen.ProfileScreen.route) {
+                    ProfileScreen(
+                        navController
+                    )
+                }
+            }
         }
-    ) { paddingValues ->
-        NavHost(
-            navController = rememberNavController(),
-            startDestination = Screen.HomeScreen.route,
-            modifier = Modifier.padding(paddingValues = paddingValues)
-        ) {
-            composable(Screen.HomeScreen.route) {
-                HomeScreen(
-                    navController =navController,
-                )
-            }
-            composable(Screen.FavoritesScreen.route) {
-                FavoriteScreen(
-                    navController
-                )
-            }
-            composable(Screen.NotificationsScreen.route) {
-                NotificationScreen(
-                    navController
-                )
-            }
-            composable(Screen.ProfileScreen.route) {
-                ProfileScreen(
-                    navController
-                )
-            }
-        }
-    }
+    )
 }
 
 

@@ -1,7 +1,9 @@
 package com.nqmgaming.furniture.presentation.main.home
 
+import android.content.Intent
 import android.content.res.Configuration
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -25,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,6 +51,7 @@ import com.nqmgaming.furniture.ui.theme.GreyLight
 import com.nqmgaming.furniture.ui.theme.PrimaryColor
 import com.nqmgaming.furniture.ui.theme.gelasioFont
 import com.nqmgaming.furniture.ui.theme.merriweatherFont
+import com.nqmgaming.furniture.util.TwiceBackHandler
 
 @Composable
 fun HomeScreen(
@@ -55,7 +59,15 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+    TwiceBackHandler(
+        onFirstBack = {
+            Toast.makeText(context, "Press again to exit", Toast.LENGTH_SHORT).show()
+        }) {
+        navController.navigateUp()
+        context.startActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME))
 
+    }
     val isLoading by viewModel.isLoading.collectAsState(initial = false)
     val lifecycleOwner: LifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     var categorySelect by rememberSaveable {
