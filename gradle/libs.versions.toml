@@ -27,7 +27,7 @@ slf4jApi = "2.0.4"
 slf4jSimple = "1.6.1"
 storageKt = "2.4.2"
 workRuntime = "2.9.0"
-workRuntimeKtx = "2.9.0"
+evVersion = "1.0.4"
 composeAnimation = "1.7.0-alpha07"
 
 [libraries]
@@ -69,7 +69,8 @@ postgrest-kt = { module = "io.github.jan-tennert.supabase:postgrest-kt", version
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jSimple" }
 storage-kt = { module = "io.github.jan-tennert.supabase:storage-kt", version.ref = "storageKt" }
-
+easyvalidation-core = { module = "com.wajahatkarim:easyvalidation-core", version.ref = "evVersion" }
+easyvalidation-toast = { module = "com.wajahatkarim:easyvalidation-toast", version.ref = "evVersion" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

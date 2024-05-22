@@ -124,4 +124,10 @@ dependencies {
     implementation(libs.slf4j.api)
     implementation(libs.slf4j.simple)
 
+    implementation (libs.easyvalidation.core)
+
+    // Shows Toasts by default for every validation error
+    implementation (libs.easyvalidation.toast)
+
+
 }

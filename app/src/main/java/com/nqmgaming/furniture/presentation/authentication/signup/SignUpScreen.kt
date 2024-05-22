@@ -1,5 +1,6 @@
 package com.nqmgaming.furniture.presentation.authentication.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -51,6 +54,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.common.components.CustomTextField
+import com.nqmgaming.furniture.common.components.LoadingDialog
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.GreyLight
@@ -67,17 +71,29 @@ fun SignUpScreen(
     navController: NavController,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
     val name = viewModel.name.collectAsState(initial = "")
+    val nameError by viewModel.nameError.collectAsState()
+
     val email = viewModel.email.collectAsState(initial = "")
+    val emailError by viewModel.emailError.collectAsState()
+
     val password = viewModel.password.collectAsState()
+    val passwordError by viewModel.passwordError.collectAsState()
+
     val confirmPassword = viewModel.confirmPassword.collectAsState()
+    val confirmPasswordError by viewModel.confirmPasswordError.collectAsState()
+
     val navigateToAppScreen by viewModel.navigateToAppScreen.collectAsState()
+
     if (navigateToAppScreen) {
         navController.navigate(Screen.AppRoute.route) {
             popUpTo(Screen.SignUpScreen.route) {
                 inclusive = true
             }
+            launchSingleTop = true
+            restoreState = true
         }
     }
     var isPasswordVisualTransformation by remember {
@@ -86,6 +102,21 @@ fun SignUpScreen(
     var isConfirmPasswordVisualTransformation by remember {
         mutableStateOf(true)
     }
+    val isLoading by viewModel.isLoading.collectAsState()
+    val message by viewModel.message.collectAsState()
+
+
+    if (isLoading) {
+        LoadingDialog(message = message)
+    }
+
+    val errorDetails by viewModel.errorDetails.collectAsState()
+    LaunchedEffect(errorDetails) {
+        if (errorDetails.isNotBlank()) {
+            Toast.makeText(context, errorDetails, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     Column(
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 30.dp)
@@ -162,7 +193,8 @@ fun SignUpScreen(
                     imeAction = ImeAction.Next,
                     unfocusedContainerColor = WhiteText,
                     focusedContainerColor = WhiteText,
-                    isPassword = false
+                    isPassword = false,
+                    errorDetail = nameError
                 )
 
                 CustomTextField(
@@ -175,7 +207,8 @@ fun SignUpScreen(
                     imeAction = ImeAction.Next,
                     unfocusedContainerColor = WhiteText,
                     focusedContainerColor = WhiteText,
-                    isPassword = false
+                    isPassword = false,
+                    errorDetail = emailError
                 )
 
                 CustomTextField(
@@ -188,6 +221,7 @@ fun SignUpScreen(
                     imeAction = ImeAction.Next,
                     unfocusedContainerColor = WhiteText,
                     focusedContainerColor = WhiteText,
+                    errorDetail = passwordError,
                     isPassword = isPasswordVisualTransformation,
                     onPasswordToggleClick = {
                         isPasswordVisualTransformation = !isPasswordVisualTransformation
@@ -201,9 +235,10 @@ fun SignUpScreen(
                     leadingIcon = Icons.Outlined.Lock,
                     singleLine = true,
                     keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Next,
+                    imeAction = ImeAction.Done,
                     unfocusedContainerColor = WhiteText,
                     focusedContainerColor = WhiteText,
+                    errorDetail = confirmPasswordError,
                     isPassword = isConfirmPasswordVisualTransformation,
                     onPasswordToggleClick = {
                         isConfirmPasswordVisualTransformation =

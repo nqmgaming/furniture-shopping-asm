@@ -14,7 +14,7 @@ class SignUpUseCaseImpl @Inject constructor(
         return withContext(Dispatchers.IO) {
             val result = authenticationRepository.signUp(input.email, input.password, input.name)
             val insertUserResult = authenticationRepository.insertUser(input.email, input.name)
-            if (insertUserResult) {
+            if (result && insertUserResult) {
                 SignUpUseCase.Output.Success
             } else {
                 SignUpUseCase.Output.Failure

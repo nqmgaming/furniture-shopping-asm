@@ -1,5 +1,7 @@
 package com.nqmgaming.furniture.presentation.authentication.login
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,12 +25,15 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -40,9 +45,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.common.components.CustomTextField
+import com.nqmgaming.furniture.common.components.LoadingDialog
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.GreyLight
@@ -53,16 +60,47 @@ import com.nqmgaming.furniture.ui.theme.merriweatherFont
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 
 @Composable
-fun LoginScreen(navController: NavController) {
-    var email by remember {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
-    }
+fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltViewModel()) {
+
+    val context = LocalContext.current
+
+    val email = viewModel.email.collectAsState(initial = "")
+    val emailError = viewModel.emailError.collectAsState(initial = "")
+
+    val password = viewModel.password.collectAsState()
+    val passwordError = viewModel.passwordError.collectAsState()
+
     var isPasswordVisualTransformation by remember {
         mutableStateOf(true)
     }
+
+    val isLoading by viewModel.isLoading.collectAsState()
+    val message by viewModel.message.collectAsState()
+
+    if (isLoading) {
+        LoadingDialog(message = message)
+    }
+
+    val errorDetails by viewModel.errorDetails.collectAsState()
+    LaunchedEffect(errorDetails) {
+        Log.d("LoginScreen", "Is Loading: $isLoading")
+        if (errorDetails.isNotBlank()) {
+            Toast.makeText(context, errorDetails, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    val navigateToAppScreen by viewModel.navigateToAppScreen.collectAsState()
+
+    if (navigateToAppScreen) {
+        navController.navigate(Screen.AppRoute.route) {
+            popUpTo(Screen.SignUpScreen.route) {
+                inclusive = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
     Column(
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp, top = 30.dp)
@@ -130,8 +168,8 @@ fun LoginScreen(navController: NavController) {
                 modifier = Modifier.padding(10.dp)
             ) {
                 CustomTextField(
-                    value = email,
-                    onValueChange = { email = it.lowercase() },
+                    value = email.value,
+                    onValueChange = { viewModel.onEmailChange(it) },
                     placeholder = stringResource(id = R.string.email),
                     leadingIcon = Icons.Outlined.Email,
                     singleLine = true,
@@ -139,12 +177,13 @@ fun LoginScreen(navController: NavController) {
                     imeAction = ImeAction.Next,
                     unfocusedContainerColor = WhiteText,
                     focusedContainerColor = WhiteText,
-                    isPassword = false
+                    isPassword = false,
+                    errorDetail = emailError.value,
                 )
 
                 CustomTextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value = password.value,
+                    onValueChange = { viewModel.onPasswordChange(it) },
                     placeholder = stringResource(id = R.string.password),
                     leadingIcon = Icons.Outlined.Lock,
                     singleLine = true,
@@ -155,7 +194,8 @@ fun LoginScreen(navController: NavController) {
                     isPassword = isPasswordVisualTransformation,
                     onPasswordToggleClick = {
                         isPasswordVisualTransformation = !isPasswordVisualTransformation
-                    }
+                    },
+                    errorDetail = passwordError.value,
                 )
 
                 Text(
@@ -173,7 +213,9 @@ fun LoginScreen(navController: NavController) {
                 )
                 Button(
                     // TODO: Check if the email and password are correct
-                    onClick = { navController.navigate(Screen.SplashScreen.route) },
+                    onClick = {
+                        viewModel.onLoginClick()
+                    },
                     modifier = Modifier
                         .width(280.dp)
                         .height(50.dp),

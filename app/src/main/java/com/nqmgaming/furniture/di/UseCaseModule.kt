@@ -1,6 +1,10 @@
 package com.nqmgaming.furniture.di
 
+import com.nqmgaming.furniture.domain.usecase.GetUserInfoUseCase
+import com.nqmgaming.furniture.domain.usecase.LogInUseCase
 import com.nqmgaming.furniture.domain.usecase.SignUpUseCase
+import com.nqmgaming.furniture.domain.usecase.impl.GetUserInfoUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.LogInUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.SignUpUseCaseImpl
 import dagger.Binds
 import dagger.Module
@@ -26,12 +30,12 @@ abstract class UseCaseModule {
 //    @Binds
 //    abstract fun bindUpdateProductUseCase(impl: UpdateProductUseCaseImpl): UpdateProductUseCase
 //
-//    @Binds
-//    abstract fun bindAuthenticateUseCase(impl: SignInUseCaseImpl): SignInUseCase
+    @Binds
+    abstract fun bindGetUserInfoUseCase(impl: GetUserInfoUseCaseImpl): GetUserInfoUseCase
 
     @Binds
     abstract fun bindSignUpUseCase(impl: SignUpUseCaseImpl): SignUpUseCase
 
-//   SignUpUseCaseImpl @Binds
-//    abstract fun bindSignInWithGoogleUseCase(impl: SignInWithGoogleUseCaseImpl): SignInWithGoogleUseCase
+    @Binds
+    abstract fun bindLogInUseCase(impl: LogInUseCaseImpl): LogInUseCase
 }

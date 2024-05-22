@@ -57,7 +57,7 @@ fun HomeScreen(
 ) {
 
     val isLoading by viewModel.isLoading.collectAsState(initial = false)
-    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleOwner: LifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     var categorySelect by rememberSaveable {
         mutableIntStateOf(0)
     }
@@ -70,21 +70,21 @@ fun HomeScreen(
 
     val maxItem = if (isPortrait) 2 else 4
 
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { source, event ->
-            if (event === Lifecycle.Event.ON_START) {
-                viewModel.getProducts()
-            }
-
-        }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-
-    }
+//    DisposableEffect(lifecycleOwner) {
+//        val observer = LifecycleEventObserver { source, event ->
+//            if (event === Lifecycle.Event.ON_START) {
+//                viewModel.getProducts()
+//            }
+//
+//        }
+//
+//        lifecycleOwner.lifecycle.addObserver(observer)
+//
+//        onDispose {
+//            lifecycleOwner.lifecycle.removeObserver(observer)
+//        }
+//
+//    }
 
     Column(
         modifier = Modifier.fillMaxSize(),

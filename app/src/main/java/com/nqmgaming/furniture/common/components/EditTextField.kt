@@ -24,7 +24,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nqmgaming.furniture.R
+import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.GreyLight
+import com.nqmgaming.furniture.ui.theme.GreyText
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 
 @Composable
@@ -39,7 +41,8 @@ fun CustomTextField(
     unfocusedContainerColor: Color,
     focusedContainerColor: Color,
     isPassword: Boolean = false,
-    onPasswordToggleClick: (() -> Unit)? = null
+    onPasswordToggleClick: (() -> Unit)? = null,
+    errorDetail: String? = null
 ) {
     TextField(
         value = value,
@@ -47,7 +50,6 @@ fun CustomTextField(
         placeholder = {
             Text(
                 text = placeholder, style = TextStyle(
-                    color = GreyLight,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Normal,
                     lineHeight = 20.sp,
@@ -57,7 +59,7 @@ fun CustomTextField(
             )
         },
         leadingIcon = {
-            Image(
+            Icon(
                 imageVector = leadingIcon, contentDescription = placeholder
             )
         },
@@ -81,10 +83,36 @@ fun CustomTextField(
         ),
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = unfocusedContainerColor,
+            unfocusedIndicatorColor = GreyText,
+            focusedIndicatorColor = BlackText,
+            unfocusedTrailingIconColor = GreyText,
+            focusedTrailingIconColor = BlackText,
             focusedContainerColor = focusedContainerColor,
+            errorContainerColor = unfocusedContainerColor,
+            errorTextColor = Color.Red,
+            errorIndicatorColor = Color.Red,
+            errorLeadingIconColor = Color.Red,
+            errorTrailingIconColor = Color.Red,
+            errorPlaceholderColor = Color.Red
         ),
+        isError = !errorDetail.isNullOrBlank(),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 15.dp)
+            .padding(horizontal = 15.dp),
+        supportingText = {
+            if (!errorDetail.isNullOrBlank()) {
+                Text(
+                    text = errorDetail,
+                    style = TextStyle(
+                        color = Color.Red,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Normal,
+                        lineHeight = 16.sp,
+                        letterSpacing = 0.5.sp,
+                        fontFamily = nunitoSansFont
+                    )
+                )
+            }
+        }
     )
 }
