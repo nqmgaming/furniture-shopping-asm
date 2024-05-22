@@ -24,6 +24,7 @@ fun SplashScreen(
     navController: NavController,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+    
 
     val preloaderLottieComposition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
@@ -50,8 +51,6 @@ fun SplashScreen(
         withContext(Dispatchers.Main) {
             navController.navigate(Screen.MainScreen.route) {
                 popUpTo(Screen.SplashScreen.route) { inclusive = true }
-                launchSingleTop = true
-                restoreState = true
             }
         }
     }

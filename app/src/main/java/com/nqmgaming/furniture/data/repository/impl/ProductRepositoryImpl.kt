@@ -17,7 +17,7 @@ class ProductRepositoryImpl @Inject constructor(
         return try {
             withContext(Dispatchers.IO) {
                 val result = postgrest.from("Products")
-                    .select(columns = Columns.list("product_id", "name", "price", "image_list"))
+                    .select(columns = Columns.list("product_id", "name", "price", "image_list", "categoryId"))
                     .decodeList<ProductDto>()
                 result
             }

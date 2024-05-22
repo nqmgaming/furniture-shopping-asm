@@ -1,9 +1,7 @@
 package com.nqmgaming.furniture.presentation.main
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.widget.Toast
-import androidx.activity.compose.BackHandler
+import android.util.Log
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -22,20 +20,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,28 +49,31 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.favorite.FavoriteScreen
 import com.nqmgaming.furniture.presentation.main.home.HomeScreen
 import com.nqmgaming.furniture.presentation.main.notification.NotificationScreen
+import com.nqmgaming.furniture.presentation.main.productDetail.ProductDetailScreen
 import com.nqmgaming.furniture.presentation.main.profile.ProfileScreen
-import com.nqmgaming.furniture.util.TwiceBackHandler
-import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    navController: NavController,
+    navController: NavController
 ) {
-
+    val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
@@ -76,36 +81,50 @@ fun MainScreen(
                 screens = BottomNavigationItem().bottomNavigationItems(),
                 navController = navController
             )
-        },
-        content = {
-            NavHost(
-                navController = rememberNavController(),
-                startDestination = Screen.HomeScreen.route,
-                modifier = Modifier.padding(paddingValues = it)
+        }
+    ) { paddingValues ->
+        NavHost(
+            navController = navController,
+            startDestination = Screen.HomeScreen.route,
+            modifier = Modifier.padding(paddingValues = paddingValues)
+        ) {
+            composable(Screen.HomeScreen.route) {
+                HomeScreen(
+                    navController
+                )
+            }
+            composable(Screen.FavoritesScreen.route) {
+                FavoriteScreen(
+                    navController
+                )
+            }
+            composable(Screen.NotificationsScreen.route) {
+                NotificationScreen(
+                    navController
+                )
+            }
+            composable(Screen.ProfileScreen.route) {
+                ProfileScreen(
+                    navController
+                )
+            }
+            composable(
+                Screen.ProductDetailScreen.route + "/{productId}",
+                arguments = listOf(
+                    navArgument("productId") {
+                        type = NavType.IntType
+                    }
+                )
             ) {
-                composable(Screen.HomeScreen.route) {
-                    HomeScreen(
-                        navController = navController,
-                    )
-                }
-                composable(Screen.FavoritesScreen.route) {
-                    FavoriteScreen(
-                        navController
-                    )
-                }
-                composable(Screen.NotificationsScreen.route) {
-                    NotificationScreen(
-                        navController
-                    )
-                }
-                composable(Screen.ProfileScreen.route) {
-                    ProfileScreen(
-                        navController
-                    )
-                }
+                val productId = it.arguments?.getInt("productId")
+                Log.d("Navigation", "Navigating to ${Screen.ProductDetailScreen.route}/$productId")
+                ProductDetailScreen(
+                    productId = productId ?: 0,
+                    navController = navController
+                )
             }
         }
-    )
+    }
 }
 
 

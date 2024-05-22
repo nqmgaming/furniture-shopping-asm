@@ -82,21 +82,21 @@ fun HomeScreen(
 
     val maxItem = if (isPortrait) 2 else 4
 
-//    DisposableEffect(lifecycleOwner) {
-//        val observer = LifecycleEventObserver { source, event ->
-//            if (event === Lifecycle.Event.ON_START) {
-//                viewModel.getProducts()
-//            }
-//
-//        }
-//
-//        lifecycleOwner.lifecycle.addObserver(observer)
-//
-//        onDispose {
-//            lifecycleOwner.lifecycle.removeObserver(observer)
-//        }
-//
-//    }
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { source, event ->
+            if (event === Lifecycle.Event.ON_START) {
+                viewModel.getProducts()
+            }
+
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
