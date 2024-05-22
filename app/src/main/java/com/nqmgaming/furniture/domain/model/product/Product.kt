@@ -13,8 +13,8 @@ data class Product(
     val createdAt: String,
     val categoryId: Int
 ) {
-    fun colorFromString(string: String) {
-        when (string) {
+    fun colorFromString(string: String): Color {
+        return when (string) {
             "red" -> Color.Red
             "green" -> Color.Green
             "blue" -> Color.Blue
@@ -31,6 +31,7 @@ data class Product(
             "lime" -> Color(0xFFCDDC39)
             "pink" -> Color(0xFFE91E63)
             "yellow" -> Color.Yellow
+            else -> Color.White
         }
     }
 

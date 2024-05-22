@@ -1,8 +1,10 @@
 package com.nqmgaming.furniture.di
 
+import com.nqmgaming.furniture.domain.usecase.GetFavoriteUseCase
 import com.nqmgaming.furniture.domain.usecase.GetUserInfoUseCase
 import com.nqmgaming.furniture.domain.usecase.LogInUseCase
 import com.nqmgaming.furniture.domain.usecase.SignUpUseCase
+import com.nqmgaming.furniture.domain.usecase.impl.GetFavoriteUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.GetUserInfoUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.LogInUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.SignUpUseCaseImpl
@@ -27,9 +29,9 @@ abstract class UseCaseModule {
 //    @Binds
 //    abstract fun bindDeleteProductUseCase(impl: DeleteProductUseCaseImpl): DeleteProductUseCase
 //
-//    @Binds
-//    abstract fun bindUpdateProductUseCase(impl: UpdateProductUseCaseImpl): UpdateProductUseCase
-//
+    @Binds
+    abstract fun bindGetFavoriteUseCase(impl: GetFavoriteUseCaseImpl): GetFavoriteUseCase
+
     @Binds
     abstract fun bindGetUserInfoUseCase(impl: GetUserInfoUseCaseImpl): GetUserInfoUseCase
 

@@ -128,6 +128,6 @@ dependencies {
 
     // Shows Toasts by default for every validation error
     implementation (libs.easyvalidation.toast)
-
+    implementation("androidx.compose.foundation:foundation:1.6.7")
 
 }
