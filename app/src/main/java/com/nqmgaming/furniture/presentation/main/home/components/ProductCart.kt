@@ -63,7 +63,8 @@ fun ProductCart(
                 modifier = Modifier
                     .height(250.dp)
                     .width(160.dp)
-                    .clip(RoundedCornerShape(10.dp)),
+                    .clip(RoundedCornerShape(10.dp))
+                ,
                 contentScale = ContentScale.Crop,
                 clipToBounds = true
             )

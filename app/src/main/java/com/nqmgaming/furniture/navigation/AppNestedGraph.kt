@@ -17,7 +17,7 @@ import com.nqmgaming.furniture.presentation.main.productDetail.ProductDetailScre
 import com.nqmgaming.furniture.presentation.main.profile.ProfileScreen
 
 fun NavGraphBuilder.appGraph(
-    navController: NavController
+    navController: NavController,
 ) {
     navigation(
         startDestination = Screen.SplashScreen.route,

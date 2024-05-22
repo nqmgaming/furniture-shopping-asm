@@ -19,6 +19,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -52,13 +53,16 @@ import com.nqmgaming.furniture.ui.theme.merriweatherFont
 fun HomeScreen(
     navController: NavController,
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
 ) {
 
     val isLoading by viewModel.isLoading.collectAsState(initial = false)
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     var categorySelect by rememberSaveable {
         mutableIntStateOf(0)
+    }
+    var showDetails by remember {
+        mutableStateOf(false)
     }
 
     val configuration = LocalConfiguration.current
@@ -172,16 +176,7 @@ fun HomeScreen(
                                         navController = navController,
                                         onProductClick = {
                                             navController.navigate(
-                                                Product(
-                                                    productId = product.productId,
-                                                    categoryId = product.categoryId,
-                                                    name = product.name,
-                                                    description = product.description,
-                                                    price = product.price,
-                                                    images = product.images,
-                                                    createdAt = product.createdAt,
-                                                    colors = product.colors,
-                                                )
+                                               Screen.ProductDetailScreen.route + "/${product.productId}"
                                             )
                                         }
                                     )
@@ -214,16 +209,7 @@ fun HomeScreen(
                                             navController = navController,
                                             onProductClick = {
                                                 navController.navigate(
-                                                    Product(
-                                                        productId = product.productId,
-                                                        categoryId = product.categoryId,
-                                                        name = product.name,
-                                                        description = product.description,
-                                                        price = product.price,
-                                                        images = product.images,
-                                                        createdAt = product.createdAt,
-                                                        colors = product.colors,
-                                                    )
+                                                    Screen.ProductDetailScreen.route + "/${product.productId}"
                                                 )
                                             }
                                         )

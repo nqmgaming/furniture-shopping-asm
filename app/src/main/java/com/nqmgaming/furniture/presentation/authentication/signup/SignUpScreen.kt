@@ -24,12 +24,15 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -44,6 +47,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.common.components.CustomTextField
@@ -59,21 +63,25 @@ import com.nqmgaming.furniture.ui.theme.nunitoSansBoldFont
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 
 @Composable
-fun SignUpScreen(navController: NavController) {
-    var name by remember {
-        mutableStateOf("")
-    }
-    var email by remember {
-        mutableStateOf("")
-    }
-    var password by remember {
-        mutableStateOf("")
+fun SignUpScreen(
+    navController: NavController,
+    viewModel: SignUpViewModel = hiltViewModel()
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val name = viewModel.name.collectAsState(initial = "")
+    val email = viewModel.email.collectAsState(initial = "")
+    val password = viewModel.password.collectAsState()
+    val confirmPassword = viewModel.confirmPassword.collectAsState()
+    val navigateToAppScreen by viewModel.navigateToAppScreen.collectAsState()
+    if (navigateToAppScreen) {
+        navController.navigate(Screen.AppRoute.route) {
+            popUpTo(Screen.SignUpScreen.route) {
+                inclusive = true
+            }
+        }
     }
     var isPasswordVisualTransformation by remember {
         mutableStateOf(true)
-    }
-    var confirmPassword by remember {
-        mutableStateOf("")
     }
     var isConfirmPasswordVisualTransformation by remember {
         mutableStateOf(true)
@@ -145,8 +153,8 @@ fun SignUpScreen(navController: NavController) {
                 modifier = Modifier.padding(10.dp)
             ) {
                 CustomTextField(
-                    value = name,
-                    onValueChange = { name = it },
+                    value = name.value,
+                    onValueChange = { viewModel.onNameChange(it) },
                     placeholder = stringResource(id = R.string.name),
                     leadingIcon = Icons.Outlined.Person,
                     singleLine = true,
@@ -158,8 +166,8 @@ fun SignUpScreen(navController: NavController) {
                 )
 
                 CustomTextField(
-                    value = email,
-                    onValueChange = { email = it.lowercase() },
+                    value = email.value,
+                    onValueChange = { viewModel.onEmailChange(it) },
                     placeholder = stringResource(id = R.string.email),
                     leadingIcon = Icons.Outlined.Email,
                     singleLine = true,
@@ -171,8 +179,8 @@ fun SignUpScreen(navController: NavController) {
                 )
 
                 CustomTextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value = password.value,
+                    onValueChange = { viewModel.onPasswordChange(it) },
                     placeholder = stringResource(id = R.string.password),
                     leadingIcon = Icons.Outlined.Lock,
                     singleLine = true,
@@ -187,8 +195,8 @@ fun SignUpScreen(navController: NavController) {
                 )
 
                 CustomTextField(
-                    value = confirmPassword,
-                    onValueChange = { confirmPassword = it },
+                    value = confirmPassword.value,
+                    onValueChange = { viewModel.onConfirmPasswordChange(it) },
                     placeholder = stringResource(id = R.string.confirm_password),
                     leadingIcon = Icons.Outlined.Lock,
                     singleLine = true,
@@ -216,8 +224,15 @@ fun SignUpScreen(navController: NavController) {
                     ),
                     modifier = Modifier.padding(vertical = 20.dp)
                 )
+                val localSoftwareKeyboardController = LocalSoftwareKeyboardController.current
                 Button(
-                    onClick = { navController.navigate(Screen.SplashScreen.route) },
+                    onClick = {
+                        viewModel.onSignUp()
+                        localSoftwareKeyboardController?.hide()
+
+                        // Navigate to the App Screen
+
+                    },
                     modifier = Modifier
                         .width(280.dp)
                         .height(50.dp),

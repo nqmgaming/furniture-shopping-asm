@@ -1,0 +1,10 @@
+package com.nqmgaming.furniture.domain.mapper
+
+import com.nqmgaming.furniture.data.network.dto.UserDto
+import com.nqmgaming.furniture.domain.model.user.User
+
+fun UserDto.asDomainModel() = User(
+    userId = userId,
+    name = name,
+    email = email,
+)
