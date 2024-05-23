@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,27 +52,15 @@ fun FavoriteScreen(
     navController: NavController,
     viewModel: FavoriteViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val lifecycleOwner: LifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { source, event ->
-            if (event === Lifecycle.Event.ON_START) {
-                // Start a coroutine using the lifecycle's coroutine scope
-                lifecycleOwner.lifecycleScope.launch {
-                    viewModel.getFavorites(
-
-                    )
-                }
-            }
-        }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-    val favoriteList = viewModel.favoriteList.collectAsState(listOf()).value
+    val favoriteList = viewModel.favoritesId.collectAsState().value
     Log.d("FavoriteScreen", "FavoriteList: $favoriteList")
+    val favoritesList = viewModel.favoriteList.collectAsState().value
+    LaunchedEffect(Unit) {
+        viewModel.fetchFavoriteList()
+    }
+
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -123,21 +112,20 @@ fun FavoriteScreen(
 
             }
 
-            if (favoriteList != null) {
-                items(favoriteList.size) { index ->
-                    val favorite = favoriteList[index]
-                    FavoriteCard(
-                        favorite = favorite,
-                        onFavoriteClick = {
-                            navController.navigate(
-                                Screen.ProductDetailScreen.route + "/${it.product!!.productId}"
-                            )
-                        },
-                        onDeleteFavoriteClick = {
-                            viewModel.onDeletedFavorite(it.favoriteId)
-                        }
-                    )
-                }
+            items(favoritesList.size) { index ->
+                val favorite = favoritesList[index]
+                FavoriteCard(
+                    product = favorite,
+                    onFavoriteClick = {
+                        navController.navigate(
+                            Screen.ProductDetailScreen.route + "/${it.productId}"
+                        )
+                    },
+                    onDeleteFavoriteClick = {
+                        viewModel.onDeleteFavoriteClick(it)
+                        Log.d("FavoriteScreen", "FavoriteList: $favoriteList")
+                    }
+                )
             }
         }
         Button(

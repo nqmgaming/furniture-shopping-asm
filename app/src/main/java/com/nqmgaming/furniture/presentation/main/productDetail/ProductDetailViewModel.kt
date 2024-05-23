@@ -8,10 +8,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.nqmgaming.furniture.data.repository.ProductRepository
 import com.nqmgaming.furniture.domain.mapper.asDomainModel
+import com.nqmgaming.furniture.domain.mapper.asDtoModel
+import com.nqmgaming.furniture.domain.model.favorite.Favorite
 import com.nqmgaming.furniture.domain.model.product.Product
-import com.nqmgaming.furniture.domain.usecase.AddFavoriteUseCase
-import com.nqmgaming.furniture.domain.usecase.DeleteFavoriteByIdUseCase
-import com.nqmgaming.furniture.domain.usecase.GetFavoriteById
+import com.nqmgaming.furniture.domain.usecase.GetFavoritesUseCase
+import com.nqmgaming.furniture.domain.usecase.UpdateFavoritesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,161 +20,110 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.nqmgaming.furniture.util.SharedPrefUtils
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
     private val productRepository: ProductRepository,
-    private val addFavoriteUseCase: AddFavoriteUseCase,
-    private val deleteFavoriteByIdUseCase: DeleteFavoriteByIdUseCase,
-    private val getFavoriteById: GetFavoriteById,
+    private val updateFavoritesUseCase: UpdateFavoritesUseCase,
+    private val getFavoritesUseCase: GetFavoritesUseCase,
     savedStateHandle: SavedStateHandle,
     application: Application
 ) : AndroidViewModel(application) {
-    private var lastClickTime = 0L
-    private var clickCount = 0
+
+    val productId = savedStateHandle.get<Int>("productId")
+
+    private val _favoriteList = MutableStateFlow<List<Product>>(emptyList())
+    val favoriteList = _favoriteList
+
+    private val _favoritesId = MutableStateFlow(Favorite(emptyList()))
+    private val favoritesId = _favoritesId
+
     private val _product = MutableStateFlow<Product?>(null)
     val product = _product
 
     private val _isFavorite = MutableStateFlow(false)
     val isFavorite: Flow<Boolean> = _isFavorite
 
-    private val _favoriteId = MutableStateFlow(0)
-    val favoriteId: Flow<Int> = _favoriteId
-
+    private val mutex = Mutex()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: Flow<Boolean> = _isLoading
     private val userId = SharedPrefUtils.getInt(getApplication(), "userId", 0)
 
     init {
-        val productId = savedStateHandle.get<Int>("productId")
         viewModelScope.launch {
             val result = productRepository.getProductById(productId!!).asDomainModel()
             _product.emit(result)
-            getFavorite()
+            getFavoriteList(userId)
         }
 
     }
 
-    fun onFavoriteClicked() {
-        if (_isLoading.value) {
-            return
-        }
-        val currentTime = System.currentTimeMillis()
-        if (currentTime - lastClickTime < 1000) { // 2 minutes
-            if (clickCount >= 1) {
-                // Show a message to the user that they are clicking too fast
-                Toast.makeText(
-                    getApplication(),
-                    "You are clicking too fast. Please wait a moment.",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return
-            } else {
-                clickCount++
-            }
-        } else {
-            lastClickTime = currentTime
-            clickCount = 1
-            viewModelScope.launch {
-                if (userId != 0 && _product.value != null) {
-                    if (_isFavorite.value) {
-                        Log.d("ProductDetailViewModel", "onFavoriteClicked: deleteFavorite")
-                        deleteFavorite(_favoriteId.value)
-                        _isFavorite.value = false
-                    } else if(!_isFavorite.value) {
-                        Log.d("ProductDetailViewModel", "onFavoriteClicked: addFavorite")
-                        addFavorite(userId, _product.value!!.productId)
-                        getFavorite()
-                        _isFavorite.value = true
-                    }
-                }
-            }
-        }
-
-    }
-
-    private suspend fun addFavorite(userId: Int, productId: Int) {
-        _isLoading.value = true
-        _isFavorite.value = true
-        try {
-            viewModelScope.launch {
-                delay(500)
-                val result = addFavoriteUseCase.execute(AddFavoriteUseCase.Input(userId, productId))
-                when (result) {
-                    is AddFavoriteUseCase.Output.Success -> {
-                        Log.d("ProductDetailViewModel", "addFavorite: success")
-                        _isLoading.value = false
-                        _isFavorite.value = true
-                    }
-
-                    is AddFavoriteUseCase.Output.Failure -> {
-                        Log.d("ProductDetailViewModel", "addFavorite: failed")
-                        _isLoading.value = false
-                        _isFavorite.value = true
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            _isLoading.value = false
-            _isFavorite.value = true
-        }
-    }
-
-    private suspend fun deleteFavorite(favoriteId: Int) {
-        _isLoading.value = true
-        _isFavorite.value = false
-        try {
-            viewModelScope.launch {
-                delay(500)
-                val result =
-                    deleteFavoriteByIdUseCase.execute(DeleteFavoriteByIdUseCase.Input(favoriteId))
-                when (result) {
-                    is DeleteFavoriteByIdUseCase.Output.Success -> {
-                        _isLoading.value = false
-                        _isFavorite.value = false
-                        Log.d("ProductDetailViewModel", "deleteFavorite: success")
-                    }
-
-                    is DeleteFavoriteByIdUseCase.Output.Failure -> {
-                        Log.d("ProductDetailViewModel", "deleteFavorite: failed")
-                        _isLoading.value = false
-                        _isFavorite.value = false
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            _isLoading.value = false
-            _isFavorite.value = false
-        }
-    }
-
-    // Kotlin
-    private fun getFavorite() {
+    fun onFavoriteClick() {
         viewModelScope.launch {
             _isLoading.value = true
-            val product = _product.value
-            if (product != null) {
-                delay(500)
-                val result =
-                    getFavoriteById.execute(GetFavoriteById.Input(userId, product.productId))
-                when (result) {
-                    is GetFavoriteById.Output.Success -> {
-                        Log.d("ProductDetailViewModel", "getFavorite: success")
-                        _favoriteId.value = result.favoriteRequest.favoriteId
-                        _isFavorite.value = true
-                    }
-
-                    is GetFavoriteById.Output.Failure -> {
-                        Log.d("ProductDetailViewModel", "getFavorite: failed")
-                        _isFavorite.value = false
-                        _isLoading.value = false
-                    }
+            mutex.withLock {
+                _isFavorite.value = !_isFavorite.value
+                if (_isFavorite.value) {
+                    addFavorite(_product.value!!)
+                    _isLoading.value = false
+                } else {
+                    deleteFavorite(_product.value!!)
+                    _isLoading.value = false
                 }
             }
-            _isLoading.value = false
+        }
+    }
+
+
+    private suspend fun updateFavoriteList(favorite: Favorite) {
+        val result = updateFavoritesUseCase.execute(
+            UpdateFavoritesUseCase.Input(
+                userId,
+                favorite.asDtoModel()
+            )
+        )
+        if (result is UpdateFavoritesUseCase.Output.Success) {
+            Log.d("FavoriteViewModel", "Success")
+        }
+    }
+
+    private suspend fun deleteFavorite(product: Product) {
+        val favoriteList = favoritesId.value.favoriteList.toMutableList()
+        favoriteList.remove(product.productId.toString())
+        val favorite = Favorite(favoriteList)
+        updateFavoriteList(favorite)
+        _favoriteList.value = _favoriteList.value.toMutableList().also {
+            it.remove(product)
+        }
+        Toast.makeText(getApplication(), "Product removed from favorite", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    private suspend fun addFavorite(product: Product) {
+        val favoriteList = favoritesId.value.favoriteList.toMutableList()
+        favoriteList.add(product.productId.toString())
+        val favorite = Favorite(favoriteList)
+        updateFavoriteList(favorite)
+        _favoriteList.value = _favoriteList.value.toMutableList().also {
+            it.add(product)
+        }
+        Toast.makeText(getApplication(), "Product added to favorite", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+
+    private suspend fun getFavoriteList(userId: Int) {
+        val result = getFavoritesUseCase.execute(GetFavoritesUseCase.Input(userId))
+        if (result is GetFavoritesUseCase.Output.Success) {
+            Log.d("FavoriteViewModel", "Success")
+            _favoritesId.value = result.favorites.asDomainModel()
+            if (_product.value != null) {
+                _isFavorite.value =
+                    _favoritesId.value.favoriteList.contains(_product.value!!.productId.toString())
+            }
         }
     }
 }

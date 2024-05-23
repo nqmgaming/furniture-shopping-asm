@@ -256,7 +256,7 @@ fun ProductDetailScreen(
         ) {
             IconButton(
                 onClick = {
-                    viewModel.onFavoriteClicked()
+                    viewModel.onFavoriteClick()
                 },
                 modifier = Modifier
                     .padding(start = 20.dp)

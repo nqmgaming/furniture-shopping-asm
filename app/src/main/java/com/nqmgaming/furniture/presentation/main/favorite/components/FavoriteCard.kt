@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.domain.model.favorite.Favorite
+import com.nqmgaming.furniture.domain.model.product.Product
 import com.nqmgaming.furniture.ui.theme.BackgroundCategory
 import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.GreyText
@@ -45,16 +46,16 @@ import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 @Composable
 fun FavoriteCard(
     modifier: Modifier = Modifier,
-    favorite: Favorite,
-    onFavoriteClick: (Favorite) -> Unit = {},
-    onDeleteFavoriteClick: (Favorite) -> Unit = {},
-    onAddFavoriteToBagClick: (Favorite) -> Unit = {}
+    product: Product,
+    onFavoriteClick: (Product) -> Unit = {},
+    onDeleteFavoriteClick: (Product) -> Unit = {},
+    onAddFavoriteToBagClick: (Product) -> Unit = {}
 ) {
     Column(
         modifier = modifier
             .padding(bottom = 10.dp, start = 16.dp, end = 16.dp)
             .clickable {
-                onFavoriteClick(favorite)
+                onFavoriteClick(product)
             },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -62,8 +63,8 @@ fun FavoriteCard(
             verticalAlignment = Alignment.Top
         ) {
             AsyncImage(
-                model = favorite.product!!.images.first(),
-                contentDescription = favorite.product.name,
+                model = product!!.images.first(),
+                contentDescription = product.name,
                 modifier = Modifier
                     .height(100.dp)
                     .width(100.dp)
@@ -77,7 +78,7 @@ fun FavoriteCard(
                     .weight(1f)
             ) {
                 Text(
-                    text = favorite.product.name, style = TextStyle(
+                    text = product.name, style = TextStyle(
                         fontFamily = nunitoSansFont,
                         color = GreyText,
                         fontSize = 14.sp,
@@ -89,7 +90,7 @@ fun FavoriteCard(
                     maxLines = 1
                 )
                 Text(
-                    text = "$ ${favorite.product.price}.00", style = TextStyle(
+                    text = "$ ${product.price}.00", style = TextStyle(
                         fontFamily = nunitoSansFont,
                         color = BlackText,
                         fontSize = 16.sp,
@@ -117,7 +118,7 @@ fun FavoriteCard(
                             shape = CircleShape
                         )
                         .clickable {
-                            onDeleteFavoriteClick(favorite)
+                            onDeleteFavoriteClick(product)
                         },
                     contentAlignment = Alignment.Center
                 ) {
@@ -136,7 +137,7 @@ fun FavoriteCard(
                             shape = RoundedCornerShape(10.dp)
                         )
                         .clickable {
-                            onAddFavoriteToBagClick(favorite)
+                            onAddFavoriteToBagClick(product)
                         },
                     contentAlignment = Alignment.Center
                 ) {
