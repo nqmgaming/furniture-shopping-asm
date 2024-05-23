@@ -12,7 +12,7 @@ data class FavoriteDto(
     @SerialName("user_id")
     val userId: Int,
     @SerialName("Products")
-    val productDto: ProductDto,
+    val productDto: ProductDto?,
     @SerialName("Users")
-    val userDto: UserDto
+    val userDto: UserDto?
 )

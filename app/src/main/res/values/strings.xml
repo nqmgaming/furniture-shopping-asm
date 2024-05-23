@@ -30,4 +30,6 @@
     <string name="increment">Increase</string>
     <string name="decrement">Decrease</string>
     <string name="star">Star</string>
+    <string name="remove">Remove from favorite</string>
+    <string name="space">Space</string>
 </resources>
