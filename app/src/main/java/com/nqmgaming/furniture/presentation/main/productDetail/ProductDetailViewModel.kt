@@ -56,6 +56,9 @@ class ProductDetailViewModel @Inject constructor(
     }
 
     fun onFavoriteClicked() {
+        if (_isLoading.value) {
+            return
+        }
         val currentTime = System.currentTimeMillis()
         if (currentTime - lastClickTime < 1000) { // 2 minutes
             if (clickCount >= 1) {
@@ -72,20 +75,17 @@ class ProductDetailViewModel @Inject constructor(
         } else {
             lastClickTime = currentTime
             clickCount = 1
-            Log.d("ProductDetailViewModel", "onFavoriteClicked: ${_isFavorite.value}")
             viewModelScope.launch {
-                if (userId != 0) {
+                if (userId != 0 && _product.value != null) {
                     if (_isFavorite.value) {
+                        Log.d("ProductDetailViewModel", "onFavoriteClicked: deleteFavorite")
                         deleteFavorite(_favoriteId.value)
                         _isFavorite.value = false
-                        Toast.makeText(getApplication(), "Removed from favorite", Toast.LENGTH_SHORT)
-                            .show()
-                    } else {
+                    } else if(!_isFavorite.value) {
+                        Log.d("ProductDetailViewModel", "onFavoriteClicked: addFavorite")
                         addFavorite(userId, _product.value!!.productId)
                         getFavorite()
                         _isFavorite.value = true
-                        Toast.makeText(getApplication(), "Added to favorite", Toast.LENGTH_SHORT)
-                            .show()
                     }
                 }
             }
@@ -95,28 +95,35 @@ class ProductDetailViewModel @Inject constructor(
 
     private suspend fun addFavorite(userId: Int, productId: Int) {
         _isLoading.value = true
+        _isFavorite.value = true
         try {
             viewModelScope.launch {
                 delay(500)
                 val result = addFavoriteUseCase.execute(AddFavoriteUseCase.Input(userId, productId))
                 when (result) {
                     is AddFavoriteUseCase.Output.Success -> {
+                        Log.d("ProductDetailViewModel", "addFavorite: success")
                         _isLoading.value = false
+                        _isFavorite.value = true
                     }
 
                     is AddFavoriteUseCase.Output.Failure -> {
+                        Log.d("ProductDetailViewModel", "addFavorite: failed")
                         _isLoading.value = false
+                        _isFavorite.value = true
                     }
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
             _isLoading.value = false
+            _isFavorite.value = true
         }
     }
 
     private suspend fun deleteFavorite(favoriteId: Int) {
         _isLoading.value = true
+        _isFavorite.value = false
         try {
             viewModelScope.launch {
                 delay(500)
@@ -126,16 +133,20 @@ class ProductDetailViewModel @Inject constructor(
                     is DeleteFavoriteByIdUseCase.Output.Success -> {
                         _isLoading.value = false
                         _isFavorite.value = false
+                        Log.d("ProductDetailViewModel", "deleteFavorite: success")
                     }
 
                     is DeleteFavoriteByIdUseCase.Output.Failure -> {
+                        Log.d("ProductDetailViewModel", "deleteFavorite: failed")
                         _isLoading.value = false
+                        _isFavorite.value = false
                     }
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
             _isLoading.value = false
+            _isFavorite.value = false
         }
     }
 
@@ -150,12 +161,13 @@ class ProductDetailViewModel @Inject constructor(
                     getFavoriteById.execute(GetFavoriteById.Input(userId, product.productId))
                 when (result) {
                     is GetFavoriteById.Output.Success -> {
+                        Log.d("ProductDetailViewModel", "getFavorite: success")
                         _favoriteId.value = result.favoriteRequest.favoriteId
                         _isFavorite.value = true
-                        _isLoading.value = false
                     }
 
                     is GetFavoriteById.Output.Failure -> {
+                        Log.d("ProductDetailViewModel", "getFavorite: failed")
                         _isFavorite.value = false
                         _isLoading.value = false
                     }
