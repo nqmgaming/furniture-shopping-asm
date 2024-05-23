@@ -21,7 +21,7 @@ import javax.inject.Singleton
 object SupabaseModule {
     @Provides
     @Singleton
-    fun proviesSupabaseClient(): SupabaseClient{
+    fun providesSupabaseClient(): SupabaseClient{
         return createSupabaseClient(
             supabaseUrl = BuildConfig.SUPABASE_URL,
             supabaseKey = BuildConfig.SUPABASE_ANON_KEY

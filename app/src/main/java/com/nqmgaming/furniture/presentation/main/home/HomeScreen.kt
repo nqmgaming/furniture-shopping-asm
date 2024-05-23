@@ -20,20 +20,16 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,9 +37,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.nqmgaming.furniture.R
-import com.nqmgaming.furniture.domain.model.product.Product
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.home.components.CategoryTabBar
 import com.nqmgaming.furniture.presentation.main.home.components.ProductCard
@@ -56,7 +50,6 @@ import com.nqmgaming.furniture.util.TwiceBackHandler
 @Composable
 fun HomeScreen(
     navController: NavController,
-    modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -68,13 +61,9 @@ fun HomeScreen(
         context.startActivity(Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME))
 
     }
-    val isLoading by viewModel.isLoading.collectAsState(initial = false)
     val lifecycleOwner: LifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
     var categorySelect by rememberSaveable {
         mutableIntStateOf(0)
-    }
-    var showDetails by remember {
-        mutableStateOf(false)
     }
 
     val configuration = LocalConfiguration.current
@@ -83,7 +72,7 @@ fun HomeScreen(
     val maxItem = if (isPortrait) 2 else 4
 
     DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { source, event ->
+        val observer = LifecycleEventObserver { _, event ->
             if (event === Lifecycle.Event.ON_START) {
                 viewModel.getProducts()
             }
@@ -185,7 +174,6 @@ fun HomeScreen(
                                         product = product,
                                         onAddToCart = {
                                         },
-                                        navController = navController,
                                         onProductClick = {
                                             navController.navigate(
                                                Screen.ProductDetailScreen.route + "/${product.productId}"
@@ -218,7 +206,6 @@ fun HomeScreen(
                                             product = product,
                                             onAddToCart = {
                                             },
-                                            navController = navController,
                                             onProductClick = {
                                                 navController.navigate(
                                                     Screen.ProductDetailScreen.route + "/${product.productId}"

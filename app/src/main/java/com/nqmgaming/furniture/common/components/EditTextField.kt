@@ -1,6 +1,5 @@
 package com.nqmgaming.furniture.common.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.ui.theme.BlackText
-import com.nqmgaming.furniture.ui.theme.GreyLight
 import com.nqmgaming.furniture.ui.theme.GreyText
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 

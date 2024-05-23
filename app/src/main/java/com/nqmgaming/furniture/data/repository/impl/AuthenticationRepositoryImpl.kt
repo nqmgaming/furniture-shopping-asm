@@ -47,19 +47,20 @@ class AuthenticationRepositoryImpl
 
     override suspend fun signUp(email: String, password: String, name: String): Boolean {
         return try {
-            val response = auth.signUpWith(Email){
+            val signup = auth.signUpWith(Email) {
                 this.email = email
                 this.password = password
                 data = buildJsonObject {
                     put("name", name)
                 }
             }
-            auth.signUpWith(Email) {
-                this.email = email
-                this.password = password
-                data = buildJsonObject {
-                    put("name", name)
-                }
+            if (signup != null) {
+                postgrest["Users"].insert(
+                    buildJsonObject {
+                        put("email", email)
+                        put("name", name)
+                    }
+                )
             }
             true
         } catch (e: Exception) {

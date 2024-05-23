@@ -29,7 +29,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val products = productRepository.getProducts()
             _productList.emit(products.map {
-                it -> it.asDomainModel()
+                it.asDomainModel()
             })
         }
     }

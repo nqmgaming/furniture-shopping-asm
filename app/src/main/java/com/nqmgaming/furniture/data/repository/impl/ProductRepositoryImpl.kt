@@ -4,14 +4,12 @@ import com.nqmgaming.furniture.data.network.dto.ProductDto
 import com.nqmgaming.furniture.data.repository.ProductRepository
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.query.Columns
-import io.github.jan.supabase.storage.Storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ProductRepositoryImpl @Inject constructor(
     private val postgrest: Postgrest,
-    private val storage: Storage
 ) : ProductRepository {
     override suspend fun getProducts(): List<ProductDto> {
         return try {

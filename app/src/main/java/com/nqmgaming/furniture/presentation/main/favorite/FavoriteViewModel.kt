@@ -2,7 +2,6 @@ package com.nqmgaming.furniture.presentation.main.favorite
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.nqmgaming.furniture.domain.mapper.asDomainModel
@@ -14,12 +13,9 @@ import com.nqmgaming.furniture.domain.usecase.GetProductByIdUseCase
 import com.nqmgaming.furniture.domain.usecase.UpdateFavoritesUseCase
 import com.nqmgaming.furniture.util.SharedPrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,8 +35,6 @@ class FavoriteViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: Flow<Boolean> = _isLoading
-
-    private val mutex = Mutex()
 
     fun fetchFavoriteList() {
         _favoriteList.value = emptyList()
@@ -63,7 +57,7 @@ class FavoriteViewModel @Inject constructor(
         Log.d("FavoriteScreen", "Product Id: ${product.productId}")
         val favoriteList = _favoritesId.value.favoriteList.toMutableList()
         Log.d("FavoriteScreen", "FavoriteList before delete: $favoriteList")
-        favoriteList.removeIf { it == product.productId.toString()}
+        favoriteList.removeIf { it == product.productId.toString() }
         Log.d("FavoriteScreen", "FavoriteList after delete: $favoriteList")
         val favorite = Favorite(favoriteList)
         Log.d("FavoriteScreen", "Favorite: $favorite")
@@ -94,7 +88,7 @@ class FavoriteViewModel @Inject constructor(
     }
 
     private suspend fun updateFavoriteList(favorite: Favorite) {
-        val result = updateFavoritesUseCase.execute(
+        updateFavoritesUseCase.execute(
             UpdateFavoritesUseCase.Input(
                 userId,
                 favorite.asDtoModel()

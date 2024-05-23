@@ -1,15 +1,11 @@
 package com.nqmgaming.furniture.data.repository.impl
 
-import android.util.Log
 import com.nqmgaming.furniture.data.network.dto.FavoriteDto
-import com.nqmgaming.furniture.data.network.dto.ProductDto
 import com.nqmgaming.furniture.data.repository.FavoriteRepository
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
 import javax.inject.Inject
 
 class FavoriteRepositoryImpl @Inject constructor(
