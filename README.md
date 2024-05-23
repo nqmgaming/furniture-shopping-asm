@@ -1,3 +1,5 @@
+### Still in development
+
 # Furniture Shopping App
 
 Furniture Shopping App là một ứng dụng mua sắm đồ nội thất được xây dựng bằng Kotlin và Java, sử dụng Gradle để quản lý dependencies.
