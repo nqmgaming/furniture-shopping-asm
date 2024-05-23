@@ -53,6 +53,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.nqmgaming.furniture.R
+import com.nqmgaming.furniture.common.components.LoadingDialog
 import com.nqmgaming.furniture.common.components.QuantityButton
 import com.nqmgaming.furniture.presentation.main.productDetail.components.AutoSlidingCarousel
 import com.nqmgaming.furniture.presentation.main.productDetail.components.SelectColor
@@ -70,6 +71,11 @@ fun ProductDetailScreen(
     productId: Int?
 ) {
     val product = viewModel.product.collectAsState().value
+    val isFavorite by viewModel.isFavorite.collectAsState(initial = false)
+    val isLoading by viewModel.isLoading.collectAsState(initial = false)
+    if (isLoading) {
+        LoadingDialog()
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -250,22 +256,25 @@ fun ProductDetailScreen(
         ) {
             IconButton(
                 onClick = {
-                    // Todo
+                    viewModel.onFavoriteClicked()
                 },
                 modifier = Modifier
                     .padding(start = 20.dp)
                     .background(QuantityColor, RoundedCornerShape(10.dp))
-                    .size(55.dp)
+                    .size(55.dp),
+                enabled = !isLoading
             ) {
                 Icon(
                     imageVector = Icons.Default.BookmarkBorder,
                     contentDescription = stringResource(id = R.string.increment),
-                    tint = Color.Black,
+                    tint = if (isFavorite) Color(0XFFFFD700) else Color.White,
                     modifier = Modifier.size(30.dp)
                 )
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+
+                },
                 modifier = Modifier
                     .padding(20.dp)
                     .fillMaxSize()

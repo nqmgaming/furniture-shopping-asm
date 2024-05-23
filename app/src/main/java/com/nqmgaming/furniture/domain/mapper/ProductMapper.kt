@@ -15,3 +15,16 @@ fun ProductDto.asDomainModel(): Product{
         createdAt = createdAt
     )
 }
+
+fun Product.asDtoModel(): ProductDto{
+    return ProductDto(
+        productId = productId,
+        name = name,
+        description = description,
+        price = price,
+        categoryId = categoryId,
+        colorList = colors,
+        imageList = images,
+        createdAt = createdAt
+    )
+}

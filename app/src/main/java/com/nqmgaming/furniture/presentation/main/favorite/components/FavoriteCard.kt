@@ -62,7 +62,7 @@ fun FavoriteCard(
             verticalAlignment = Alignment.Top
         ) {
             AsyncImage(
-                model = favorite.product.images.first(),
+                model = favorite.product!!.images.first(),
                 contentDescription = favorite.product.name,
                 modifier = Modifier
                     .height(100.dp)

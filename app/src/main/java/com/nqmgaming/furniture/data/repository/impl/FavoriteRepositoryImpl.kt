@@ -2,6 +2,7 @@ package com.nqmgaming.furniture.data.repository.impl
 
 import android.util.Log
 import com.nqmgaming.furniture.data.network.dto.FavoriteDto
+import com.nqmgaming.furniture.data.network.dto.FavoriteRequest
 import com.nqmgaming.furniture.data.repository.FavoriteRepository
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.query.Columns
@@ -30,20 +31,22 @@ class FavoriteRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getFavoritesByFavoriteId(favoriteId: Int): FavoriteDto {
+    override suspend fun getIsFavorite(userId: Int, productId: Int): FavoriteRequest {
         return try {
             val result = postgrest.from("Favorites")
                 .select(
-                    columns = Columns.list("*", "Products(*), Users(*)")
+                    columns = Columns.list("*")
                 ) {
                     filter {
-                        eq("favorite_id", favoriteId)
+                        eq("user_id", userId)
+                        eq("product_id", productId)
                     }
-                }.decodeSingle<FavoriteDto>()
-            result
+                }.decodeList<FavoriteRequest>()
+            Log.d("FavoriteRepositoryImpl", "getIsFavorite: $result")
+            result.firstOrNull() ?: FavoriteRequest(0, 0, 0)
         } catch (e: Exception) {
             e.printStackTrace()
-            FavoriteDto(0, 0, 0, null, null)
+            FavoriteRequest(0, 0, 0)
         }
     }
 

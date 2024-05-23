@@ -130,7 +130,7 @@ fun FavoriteScreen(
                         favorite = favorite,
                         onFavoriteClick = {
                             navController.navigate(
-                                Screen.ProductDetailScreen.route + "/${it.product.productId}"
+                                Screen.ProductDetailScreen.route + "/${it.product!!.productId}"
                             )
                         },
                         onDeleteFavoriteClick = {

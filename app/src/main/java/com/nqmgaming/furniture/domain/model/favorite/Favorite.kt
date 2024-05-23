@@ -6,5 +6,7 @@ import com.nqmgaming.furniture.domain.model.user.User
 data class Favorite(
     val favoriteId: Int,
     val user: User,
-    val product: Product
+    val product: Product?,
+    val userId: Int,
+    val productId: Int
 )

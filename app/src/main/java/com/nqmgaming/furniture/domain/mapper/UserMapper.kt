@@ -8,3 +8,9 @@ fun UserDto.asDomainModel() = User(
     name = name,
     email = email,
 )
+
+fun User.asDtoModel() = UserDto(
+    userId = userId,
+    name = name,
+    email = email,
+)

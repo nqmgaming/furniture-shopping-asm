@@ -6,8 +6,10 @@ import com.nqmgaming.furniture.domain.model.favorite.Favorite
 fun FavoriteDto.asDomainModel(): Favorite {
     return Favorite(
         favoriteId = favoriteId,
-        user = userDto.asDomainModel(),
-        product = productDto.asDomainModel()
+        user = userDto!!.asDomainModel(),
+        product = productDto!!.asDomainModel(),
+        userId = userId,
+        productId = productId
     )
 }
 
@@ -15,6 +17,8 @@ fun Favorite.asDtoModel(): FavoriteDto {
     return FavoriteDto(
         favoriteId = favoriteId,
         userId = user.userId,
-        productId = product.productId
+        productId = product!!.productId,
+        productDto = product.asDtoModel(),
+        userDto = user.asDtoModel()
     )
 }
