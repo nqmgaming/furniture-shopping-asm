@@ -50,6 +50,7 @@ class ProductDetailViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: Flow<Boolean> = _isLoading
+
     private val userId = SharedPrefUtils.getInt(getApplication(), "userId", 0)
 
     init {

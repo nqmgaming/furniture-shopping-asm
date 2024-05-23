@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +39,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nqmgaming.furniture.R
+import com.nqmgaming.furniture.common.components.LoadingDialog
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.favorite.components.FavoriteCard
 import com.nqmgaming.furniture.ui.theme.GreyLight
@@ -52,10 +54,10 @@ fun FavoriteScreen(
     navController: NavController,
     viewModel: FavoriteViewModel = hiltViewModel()
 ) {
-    val context = LocalContext.current
-    val lifecycleOwner: LifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
-    val favoriteList = viewModel.favoritesId.collectAsState().value
-    Log.d("FavoriteScreen", "FavoriteList: $favoriteList")
+    val isLoading by viewModel.isLoading.collectAsState(initial = false)
+    if (isLoading) {
+        LoadingDialog()
+    }
     val favoritesList = viewModel.favoriteList.collectAsState().value
     LaunchedEffect(Unit) {
         viewModel.fetchFavoriteList()
@@ -122,8 +124,7 @@ fun FavoriteScreen(
                         )
                     },
                     onDeleteFavoriteClick = {
-                        viewModel.onDeleteFavoriteClick(it)
-                        Log.d("FavoriteScreen", "FavoriteList: $favoriteList")
+                        viewModel.onDeletedFavorite(it)
                     }
                 )
             }

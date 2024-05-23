@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nqmgaming.furniture.domain.mapper.asDomainModel
 import com.nqmgaming.furniture.domain.mapper.asDtoModel
@@ -15,9 +14,12 @@ import com.nqmgaming.furniture.domain.usecase.GetProductByIdUseCase
 import com.nqmgaming.furniture.domain.usecase.UpdateFavoritesUseCase
 import com.nqmgaming.furniture.util.SharedPrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.ktor.client.engine.android.Android
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,48 +29,56 @@ class FavoriteViewModel @Inject constructor(
     private val updateFavoritesUseCase: UpdateFavoritesUseCase,
     application: Application
 ) : AndroidViewModel(application) {
+
     private val _favoriteList = MutableStateFlow<List<Product>>(emptyList())
     val favoriteList = _favoriteList
 
     private val _favoritesId = MutableStateFlow(Favorite(emptyList()))
-    val favoritesId = _favoritesId
 
     private val userId = SharedPrefUtils.getInt(getApplication(), "userId", 0)
 
-    init {
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: Flow<Boolean> = _isLoading
 
-    }
+    private val mutex = Mutex()
 
     fun fetchFavoriteList() {
         _favoriteList.value = emptyList()
         viewModelScope.launch {
             getFavoriteList()
             Log.d("FavoriteScreen", "Log run in here")
-            getProductById(favoritesId.value.favoriteList)
+            getProductById(_favoritesId.value.favoriteList)
             Log.d("FavoriteScreen", "FavoriteList: $favoriteList")
         }
     }
 
-    fun onDeleteFavoriteClick(product: Product) {
-        val favoriteList = favoritesId.value.favoriteList.toMutableList()
-        favoriteList.remove(product.productId.toString())
-        val favorite = Favorite(favoriteList)
+
+    fun onDeletedFavorite(product: Product) {
         viewModelScope.launch {
-            updateFavoriteList(favorite)
-            _favoriteList.value = _favoriteList.value.toMutableList().also {
-                it.remove(product)
-            }
-            Toast.makeText(getApplication(), "Product removed from favorite", Toast.LENGTH_SHORT)
-                .show()
+            deleteFavorite(product)
         }
+    }
+
+    private suspend fun deleteFavorite(product: Product) {
+        Log.d("FavoriteScreen", "Product Id: ${product.productId}")
+        val favoriteList = _favoritesId.value.favoriteList.toMutableList()
+        Log.d("FavoriteScreen", "FavoriteList before delete: $favoriteList")
+        favoriteList.removeIf { it == product.productId.toString()}
+        Log.d("FavoriteScreen", "FavoriteList after delete: $favoriteList")
+        val favorite = Favorite(favoriteList)
+        Log.d("FavoriteScreen", "Favorite: $favorite")
+        updateFavoriteList(favorite)
+        _favoritesId.value = favorite
+        _favoriteList.value = _favoriteList.value.toMutableList().also { products ->
+            products.removeIf { it.productId == product.productId }
+        }
+        Log.d("FavoriteScreen", "FavoriteList after update: $favoriteList")
     }
 
     private suspend fun getFavoriteList() {
         val result = getFavoritesUseCase.execute(GetFavoritesUseCase.Input(userId))
         if (result is GetFavoritesUseCase.Output.Success) {
-            Log.d("FavoriteViewModel", "Success")
             _favoritesId.value = result.favorites.asDomainModel()
-            Log.d("FavoriteViewModel", "Success")
         }
     }
 
@@ -83,17 +93,12 @@ class FavoriteViewModel @Inject constructor(
         }
     }
 
-    private suspend fun updateFavoriteList(favoriteList: Favorite) {
+    private suspend fun updateFavoriteList(favorite: Favorite) {
         val result = updateFavoritesUseCase.execute(
             UpdateFavoritesUseCase.Input(
                 userId,
-                favoriteList.asDtoModel()
+                favorite.asDtoModel()
             )
         )
-        if (result is UpdateFavoritesUseCase.Output.Success) {
-            Log.d("FavoriteViewModel", "Success")
-        }
     }
-
-
 }

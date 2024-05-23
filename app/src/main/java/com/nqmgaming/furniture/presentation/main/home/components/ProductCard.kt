@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,14 +31,13 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.domain.model.product.Product
-import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.GreyText
 import com.nqmgaming.furniture.ui.theme.WhiteText
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 
 @Composable
-fun ProductCart(
+fun ProductCard(
     modifier: Modifier = Modifier,
     product: Product,
     onAddToCart: (Product) -> Unit,
@@ -105,7 +104,9 @@ fun ProductCart(
             ),
             modifier = Modifier
                 .padding(vertical = 10.dp),
-            textAlign = TextAlign.Start
+            textAlign = TextAlign.Start,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         Text(
             text = "$ ${product.price}.00", style = TextStyle(
@@ -120,23 +121,4 @@ fun ProductCart(
         )
 
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun ProductCartPreview() {
-    ProductCart(
-        product = Product(
-            productId = 1,
-            name = "Product Name",
-            price = 100,
-            description = "Product Description",
-            images = listOf("https://res.cloudinary.com/ddqearyoe/image/upload/v1716285663/furniture/fhe2zgjds7fwfg59kwt0.png"),
-            categoryId = 1,
-            colors = listOf("Red", "Blue"),
-            createdAt = "2021-09-01T00:00:00Z",
-        ),
-        onAddToCart = {},
-        navController = rememberNavController()
-    )
 }

@@ -46,7 +46,7 @@ import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.domain.model.product.Product
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.home.components.CategoryTabBar
-import com.nqmgaming.furniture.presentation.main.home.components.ProductCart
+import com.nqmgaming.furniture.presentation.main.home.components.ProductCard
 import com.nqmgaming.furniture.ui.theme.GreyLight
 import com.nqmgaming.furniture.ui.theme.PrimaryColor
 import com.nqmgaming.furniture.ui.theme.gelasioFont
@@ -181,7 +181,7 @@ fun HomeScreen(
                         if (categorySelect == 0) {
                             productList.forEach { product ->
                                 item {
-                                    ProductCart(
+                                    ProductCard(
                                         product = product,
                                         onAddToCart = {
                                         },
@@ -214,7 +214,7 @@ fun HomeScreen(
                             } else {
                                 filteredList.forEach { product ->
                                     item {
-                                        ProductCart(
+                                        ProductCard(
                                             product = product,
                                             onAddToCart = {
                                             },
@@ -247,10 +247,4 @@ fun HomeScreen(
             }
         }
     }
-}
-
-@Preview(showSystemUi = true, device = "spec:parent=pixel_5,orientation=landscape")
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen(navController = rememberNavController())
 }
