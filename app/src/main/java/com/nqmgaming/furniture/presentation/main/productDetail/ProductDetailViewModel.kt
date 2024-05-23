@@ -57,8 +57,8 @@ class ProductDetailViewModel @Inject constructor(
 
     fun onFavoriteClicked() {
         val currentTime = System.currentTimeMillis()
-        if (currentTime - lastClickTime < 500) { // 2 minutes
-            if (clickCount >= 2) {
+        if (currentTime - lastClickTime < 1000) { // 2 minutes
+            if (clickCount >= 1) {
                 // Show a message to the user that they are clicking too fast
                 Toast.makeText(
                     getApplication(),
@@ -72,25 +72,25 @@ class ProductDetailViewModel @Inject constructor(
         } else {
             lastClickTime = currentTime
             clickCount = 1
-        }
-        Log.d("ProductDetailViewModel", "onFavoriteClicked: ${_isFavorite.value}")
-        viewModelScope.launch {
-            if (userId != 0) {
-                if (_isFavorite.value) {
-                    deleteFavorite(_favoriteId.value)
-                    getFavorite()
-                    _isFavorite.value = false
-                    Toast.makeText(getApplication(), "Removed from favorite", Toast.LENGTH_SHORT)
-                        .show()
-                } else {
-                    addFavorite(userId, _product.value!!.productId)
-                    getFavorite()
-                    _isFavorite.value = true
-                    Toast.makeText(getApplication(), "Added to favorite", Toast.LENGTH_SHORT)
-                        .show()
+            Log.d("ProductDetailViewModel", "onFavoriteClicked: ${_isFavorite.value}")
+            viewModelScope.launch {
+                if (userId != 0) {
+                    if (_isFavorite.value) {
+                        deleteFavorite(_favoriteId.value)
+                        _isFavorite.value = false
+                        Toast.makeText(getApplication(), "Removed from favorite", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        addFavorite(userId, _product.value!!.productId)
+                        getFavorite()
+                        _isFavorite.value = true
+                        Toast.makeText(getApplication(), "Added to favorite", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             }
         }
+
     }
 
     private suspend fun addFavorite(userId: Int, productId: Int) {
@@ -125,6 +125,7 @@ class ProductDetailViewModel @Inject constructor(
                 when (result) {
                     is DeleteFavoriteByIdUseCase.Output.Success -> {
                         _isLoading.value = false
+                        _isFavorite.value = false
                     }
 
                     is DeleteFavoriteByIdUseCase.Output.Failure -> {
@@ -149,8 +150,8 @@ class ProductDetailViewModel @Inject constructor(
                     getFavoriteById.execute(GetFavoriteById.Input(userId, product.productId))
                 when (result) {
                     is GetFavoriteById.Output.Success -> {
-                        _isFavorite.value = true
                         _favoriteId.value = result.favoriteRequest.favoriteId
+                        _isFavorite.value = true
                         _isLoading.value = false
                     }
 
