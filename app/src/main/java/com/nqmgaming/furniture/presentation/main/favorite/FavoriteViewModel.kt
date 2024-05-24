@@ -8,9 +8,9 @@ import com.nqmgaming.furniture.domain.mapper.asDomainModel
 import com.nqmgaming.furniture.domain.mapper.asDtoModel
 import com.nqmgaming.furniture.domain.model.favorite.Favorite
 import com.nqmgaming.furniture.domain.model.product.Product
-import com.nqmgaming.furniture.domain.usecase.GetFavoritesUseCase
-import com.nqmgaming.furniture.domain.usecase.GetProductByIdUseCase
-import com.nqmgaming.furniture.domain.usecase.UpdateFavoritesUseCase
+import com.nqmgaming.furniture.domain.usecase.favorite.GetFavoritesUseCase
+import com.nqmgaming.furniture.domain.usecase.product.GetProductByIdUseCase
+import com.nqmgaming.furniture.domain.usecase.favorite.UpdateFavoritesUseCase
 import com.nqmgaming.furniture.util.SharedPrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

@@ -3,11 +3,9 @@ package com.nqmgaming.furniture.presentation.authentication.login
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nqmgaming.furniture.data.repository.AuthenticationRepository
-import com.nqmgaming.furniture.domain.usecase.GetUserInfoUseCase
-import com.nqmgaming.furniture.domain.usecase.LogInUseCase
+import com.nqmgaming.furniture.domain.usecase.user.GetUserInfoUseCase
+import com.nqmgaming.furniture.domain.usecase.user.LogInUseCase
 import com.nqmgaming.furniture.util.SharedPrefUtils
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.lifecycle.HiltViewModel

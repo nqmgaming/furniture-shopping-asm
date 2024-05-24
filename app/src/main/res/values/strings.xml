@@ -34,4 +34,7 @@
     <string name="space">Space</string>
     <string name="logout_message">Are you sure want to logout?</string>
     <string name="log_out">Log out</string>
+    <string name="my_cart">My cart</string>
+    <string name="title_activity_splash_avtivity">SplashAvtivity</string>
+    <string name="remove_cart">Remove Cart</string>
 </resources>

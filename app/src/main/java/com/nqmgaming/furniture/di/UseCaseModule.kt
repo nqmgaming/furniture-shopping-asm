@@ -1,17 +1,21 @@
 package com.nqmgaming.furniture.di
 
-import com.nqmgaming.furniture.domain.usecase.GetFavoritesUseCase
-import com.nqmgaming.furniture.domain.usecase.GetProductByIdUseCase
-import com.nqmgaming.furniture.domain.usecase.GetUserInfoUseCase
-import com.nqmgaming.furniture.domain.usecase.LogInUseCase
-import com.nqmgaming.furniture.domain.usecase.SignUpUseCase
-import com.nqmgaming.furniture.domain.usecase.UpdateFavoritesUseCase
-import com.nqmgaming.furniture.domain.usecase.impl.GetFavoritesUseCaseImpl
-import com.nqmgaming.furniture.domain.usecase.impl.GetProductByIdUseCaseImpl
-import com.nqmgaming.furniture.domain.usecase.impl.GetUserInfoUseCaseImpl
-import com.nqmgaming.furniture.domain.usecase.impl.LogInUseCaseImpl
-import com.nqmgaming.furniture.domain.usecase.impl.SignUpUseCaseImpl
-import com.nqmgaming.furniture.domain.usecase.impl.UpdateFavoritesUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.cart.GetCartByIdUseCase
+import com.nqmgaming.furniture.domain.usecase.cart.GetCartsByUserIdUseCase
+import com.nqmgaming.furniture.domain.usecase.favorite.GetFavoritesUseCase
+import com.nqmgaming.furniture.domain.usecase.product.GetProductByIdUseCase
+import com.nqmgaming.furniture.domain.usecase.user.GetUserInfoUseCase
+import com.nqmgaming.furniture.domain.usecase.user.LogInUseCase
+import com.nqmgaming.furniture.domain.usecase.user.SignUpUseCase
+import com.nqmgaming.furniture.domain.usecase.favorite.UpdateFavoritesUseCase
+import com.nqmgaming.furniture.domain.usecase.impl.cart.GetCartByIdUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.cart.GetCartsByUserIdUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.favorite.GetFavoritesUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.product.GetProductByIdUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.user.GetUserInfoUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.user.LogInUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.user.SignUpUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.favorite.UpdateFavoritesUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -22,19 +26,17 @@ import dagger.hilt.components.SingletonComponent
 abstract class UseCaseModule {
 
     @Binds
+    abstract fun bindGetCartByIdUserUseCase(impl: GetCartsByUserIdUseCaseImpl): GetCartsByUserIdUseCase
+
+    @Binds
+    abstract fun bindGetCartByIdUseCase(impl: GetCartByIdUseCaseImpl): GetCartByIdUseCase
+
+    @Binds
     abstract fun bindGetProductByIdUseCase(impl: GetProductByIdUseCaseImpl): GetProductByIdUseCase
 
     @Binds
     abstract fun bindUpdateFavoritesUseCase(impl: UpdateFavoritesUseCaseImpl): UpdateFavoritesUseCase
 
-    //   @Binds
-//    abstract fun bindGetFavoriteByIdUseCase(impl: GetFavoriteByIdImpl): GetFavoriteById
-//
-//    @Binds
-//    abstract fun addFavoriteUseCase(impl: AddFavoriteUseCaseImpl): AddFavoriteUseCase
-//
-//    @Binds
-//    abstract fun bindDeleteFavoriteByIdUseCase(impl: DeleteFavoriteByIdUseCaseImpl): DeleteFavoriteByIdUseCase
     @Binds
     abstract fun bindGetFavoriteUseCase(impl: GetFavoritesUseCaseImpl): GetFavoritesUseCase
 

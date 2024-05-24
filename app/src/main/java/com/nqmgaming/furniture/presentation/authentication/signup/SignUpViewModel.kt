@@ -3,9 +3,8 @@ package com.nqmgaming.furniture.presentation.authentication.signup
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nqmgaming.furniture.domain.usecase.SignUpUseCase
+import com.nqmgaming.furniture.domain.usecase.user.SignUpUseCase
 import com.nqmgaming.furniture.util.SharedPrefUtils
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import dagger.hilt.android.lifecycle.HiltViewModel

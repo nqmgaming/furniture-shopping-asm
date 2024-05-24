@@ -1,7 +1,7 @@
-package com.nqmgaming.furniture.domain.usecase.impl
+package com.nqmgaming.furniture.domain.usecase.impl.user
 
 import com.nqmgaming.furniture.data.repository.AuthenticationRepository
-import com.nqmgaming.furniture.domain.usecase.GetUserInfoUseCase
+import com.nqmgaming.furniture.domain.usecase.user.GetUserInfoUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

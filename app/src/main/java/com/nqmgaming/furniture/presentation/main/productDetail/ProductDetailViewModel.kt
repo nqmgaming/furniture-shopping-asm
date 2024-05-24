@@ -11,8 +11,8 @@ import com.nqmgaming.furniture.domain.mapper.asDomainModel
 import com.nqmgaming.furniture.domain.mapper.asDtoModel
 import com.nqmgaming.furniture.domain.model.favorite.Favorite
 import com.nqmgaming.furniture.domain.model.product.Product
-import com.nqmgaming.furniture.domain.usecase.GetFavoritesUseCase
-import com.nqmgaming.furniture.domain.usecase.UpdateFavoritesUseCase
+import com.nqmgaming.furniture.domain.usecase.favorite.GetFavoritesUseCase
+import com.nqmgaming.furniture.domain.usecase.favorite.UpdateFavoritesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

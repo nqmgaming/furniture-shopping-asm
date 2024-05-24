@@ -64,6 +64,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.nqmgaming.furniture.navigation.authGraph
 import com.nqmgaming.furniture.presentation.Screen
+import com.nqmgaming.furniture.presentation.main.cart.CartScreen
 import com.nqmgaming.furniture.presentation.main.favorite.FavoriteScreen
 import com.nqmgaming.furniture.presentation.main.home.HomeScreen
 import com.nqmgaming.furniture.presentation.main.notification.NotificationScreen
@@ -161,6 +162,19 @@ fun MainScreen(
                 val productId = it.arguments?.getInt("productId")
                 Log.d("Navigation", "Navigating to ${Screen.ProductDetailScreen.route}/$productId")
                 ProductDetailScreen(
+                    navController = navController
+                )
+            }
+            composable(
+                route = Screen.CartScreen.route,
+                enterTransition = {
+                    fadeIn(animationSpec = tween(300))
+                },
+                exitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                }
+            ) {
+                CartScreen(
                     navController = navController
                 )
             }

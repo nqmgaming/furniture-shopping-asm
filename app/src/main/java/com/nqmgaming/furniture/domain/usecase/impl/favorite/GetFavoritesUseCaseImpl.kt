@@ -1,8 +1,7 @@
-package com.nqmgaming.furniture.domain.usecase.impl
+package com.nqmgaming.furniture.domain.usecase.impl.favorite
 
 import com.nqmgaming.furniture.data.repository.FavoriteRepository
-import com.nqmgaming.furniture.domain.usecase.GetFavoritesUseCase
-import com.nqmgaming.furniture.domain.usecase.GetUserInfoUseCase
+import com.nqmgaming.furniture.domain.usecase.favorite.GetFavoritesUseCase
 import javax.inject.Inject
 
 class GetFavoritesUseCaseImpl @Inject constructor(

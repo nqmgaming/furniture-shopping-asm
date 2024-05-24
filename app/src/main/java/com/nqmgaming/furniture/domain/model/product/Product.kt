@@ -4,14 +4,14 @@ import androidx.compose.ui.graphics.Color
 
 
 data class Product(
-    val productId: Int,
-    val name: String,
-    val price: Int,
-    val description: String,
-    val colors: List<String>,
-    val images: List<String>,
-    val createdAt: String,
-    val categoryId: Int
+    val productId: Int = 0,
+    val name: String = "",
+    val price: Int = 0,
+    val description: String = "",
+    val colors: List<String> = listOf(),
+    val images: List<String> = listOf(),
+    val createdAt: String = "",
+    val categoryId: Int = 0,
 ) {
     fun colorFromString(string: String): Color {
         return when (string) {

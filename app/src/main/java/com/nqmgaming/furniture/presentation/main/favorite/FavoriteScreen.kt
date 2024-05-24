@@ -1,6 +1,7 @@
 package com.nqmgaming.furniture.presentation.main.favorite
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -109,6 +110,9 @@ fun FavoriteScreen(
                         modifier = Modifier
                             .weight(1f)
                             .padding(5.dp)
+                            .clickable {
+                                navController.navigate(Screen.CartScreen.route)
+                            }
                     )
                 }
 

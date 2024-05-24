@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -103,7 +104,11 @@ fun HomeScreen(
                 contentDescription = stringResource(
                     id = R.string.search
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+
+                    }
             )
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -140,6 +145,9 @@ fun HomeScreen(
                 modifier = Modifier
                     .weight(1f)
                     .padding(5.dp)
+                    .clickable {
+                        navController.navigate(Screen.CartScreen.route)
+                    }
             )
         }
 
@@ -176,7 +184,7 @@ fun HomeScreen(
                                         },
                                         onProductClick = {
                                             navController.navigate(
-                                               Screen.ProductDetailScreen.route + "/${product.productId}"
+                                                Screen.ProductDetailScreen.route + "/${product.productId}"
                                             )
                                         }
                                     )
