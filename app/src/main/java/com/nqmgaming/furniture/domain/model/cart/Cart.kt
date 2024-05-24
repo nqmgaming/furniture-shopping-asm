@@ -4,7 +4,7 @@ import com.nqmgaming.furniture.domain.model.product.Product
 
 data class Cart(
     val cartId: Int,
-    val quantity: Int,
+    var quantity: Int,
     val colorString: String,
     val productId: Int,
     var product: Product = Product()
