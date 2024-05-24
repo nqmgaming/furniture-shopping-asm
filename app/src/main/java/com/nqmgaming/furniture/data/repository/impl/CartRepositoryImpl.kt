@@ -21,7 +21,12 @@ class CartRepositoryImpl @Inject constructor(
             val result = postgrest.from("Carts")
                 .select(
                     columns = Columns.list(
-                        "cart_list"
+                        "cart_id",
+                        "product_id",
+                        "color",
+                        "quantity",
+                        "user_id",
+                        "Products(*)"
                     )
                 ) {
                     filter {
@@ -46,23 +51,13 @@ class CartRepositoryImpl @Inject constructor(
             result
         } catch (e: Exception) {
             e.printStackTrace()
-            CartDto(-1, -1, "", -1, -1)
+            CartDto()
         }
     }
 
     override suspend fun removeCartItem(cartItem: CartDto, userId: Int, cartsId: List<String>) {
         // Update cart_list in Users then delete cart in Carts
         try {
-            postgrest.from("Users")
-                .update(
-                    {
-                        set("cart_list", cartsId)
-                    }
-                ) {
-                    filter {
-                        eq("user_id", userId)
-                    }
-                }
             postgrest.from("Carts")
                 .delete {
                     filter {
@@ -108,22 +103,6 @@ class CartRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun removeAllCartId(userId: Int) {
-        try {
-            postgrest.from("Users")
-                .update(
-                    {
-                        set("cart_list", emptyList<String>())
-                    }
-                ) {
-                    filter {
-                        eq("user_id", userId)
-                    }
-                }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     override suspend fun removeAllFromCart(cartId: String) {
         try {
@@ -141,7 +120,8 @@ class CartRepositoryImpl @Inject constructor(
     override suspend fun addToCart(
         productId: Int,
         quantity: Int,
-        colorString: String
+        colorString: String,
+        userId: Int
     ): CartDto? {
         try {
             val result = postgrest.from("Carts")
@@ -150,6 +130,7 @@ class CartRepositoryImpl @Inject constructor(
                         put("product_id", productId)
                         put("quantity", quantity)
                         put("color", colorString)
+                        put("user_id", userId)
                     }
                 )
             val response = Json.decodeFromString<CartDto>(result.data)
@@ -161,22 +142,6 @@ class CartRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addIdCart(userId: Int, cartsId: List<String>) {
-        try {
-            postgrest.from("Users")
-                .update(
-                    {
-                        set("cart_list", cartsId)
-                    }
-                ) {
-                    filter {
-                        eq("user_id", userId)
-                    }
-                }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
 
 }

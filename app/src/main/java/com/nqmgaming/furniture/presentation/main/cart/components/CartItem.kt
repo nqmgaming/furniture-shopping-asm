@@ -71,7 +71,7 @@ fun CartItem(
             modifier = Modifier,
         ) {
             AsyncImage(
-                model = cartItem.product.images.first(),
+                model = cartItem.product.images.firstOrNull(),
                 contentDescription = cartItem.product.name,
                 modifier = Modifier
                     .height(100.dp)

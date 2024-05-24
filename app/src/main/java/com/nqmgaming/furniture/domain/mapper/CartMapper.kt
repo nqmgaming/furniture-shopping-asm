@@ -9,7 +9,8 @@ fun CartDto.asDomainModel(): Cart {
         productId = productId,
         quantity = quantity,
         colorString = colorString,
-        userId = userId
+        userId = userId,
+        product = product.asDomainModel()
     )
 }
 
@@ -19,6 +20,7 @@ fun Cart.asDtoModel(): CartDto {
         productId = productId,
         quantity = quantity,
         colorString = colorString,
-        userId = userId
+        userId = userId,
+        product = product.asDtoModel()
     )
 }

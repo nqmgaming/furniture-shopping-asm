@@ -6,13 +6,15 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class CartDto(
     @SerialName("cart_id")
-    val cartId: Int,
+    val cartId: Int = 0,
     @SerialName("quantity")
-    val quantity: Int,
+    val quantity: Int = 0,
     @SerialName("color")
-    val colorString: String,
+    val colorString: String = "",
     @SerialName("product_id")
-    val productId: Int,
+    val productId: Int = 0,
     @SerialName("user_id")
-    val userId: Int
+    val userId: Int = 0,
+    @SerialName("Products")
+    val product: ProductDto = ProductDto()
 )

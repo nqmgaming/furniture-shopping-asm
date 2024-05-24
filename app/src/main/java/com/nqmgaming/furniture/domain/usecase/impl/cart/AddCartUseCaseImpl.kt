@@ -12,7 +12,8 @@ class AddCartUseCaseImpl @Inject constructor(
             val result = cartRepository.addToCart(
                 input.productId,
                 input.quantity,
-                input.colorString
+                input.colorString,
+                input.userId
             )
             AddCartUseCase.Output.Success(result)
         } catch (e: Exception) {

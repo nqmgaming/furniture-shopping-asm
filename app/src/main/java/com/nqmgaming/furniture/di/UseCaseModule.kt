@@ -1,7 +1,6 @@
 package com.nqmgaming.furniture.di
 
 import com.nqmgaming.furniture.domain.usecase.cart.AddCartUseCase
-import com.nqmgaming.furniture.domain.usecase.cart.AddIdCartToUserUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.DecrementQuantityCartUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.GetCartByIdUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.GetCartsByUserIdUseCase
@@ -14,7 +13,6 @@ import com.nqmgaming.furniture.domain.usecase.user.LogInUseCase
 import com.nqmgaming.furniture.domain.usecase.user.SignUpUseCase
 import com.nqmgaming.furniture.domain.usecase.favorite.UpdateFavoritesUseCase
 import com.nqmgaming.furniture.domain.usecase.impl.cart.AddCartUseCaseImpl
-import com.nqmgaming.furniture.domain.usecase.impl.cart.AddIdCartToUserUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.cart.DecrementQuantityCartUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.cart.GetCartByIdUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.cart.GetCartsByUserIdUseCaseImpl
@@ -36,8 +34,6 @@ import dagger.hilt.components.SingletonComponent
 abstract class UseCaseModule {
 
     // This is the part for the cart use cases
-    @Binds
-    abstract fun bindAddIdCartToUserUseCase(impl: AddIdCartToUserUseCaseImpl): AddIdCartToUserUseCase
 
     @Binds
     abstract fun bindAddCartUseCase(impl: AddCartUseCaseImpl): AddCartUseCase

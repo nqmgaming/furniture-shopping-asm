@@ -1,5 +1,6 @@
 package com.nqmgaming.furniture.domain.usecase.cart
 
+import com.nqmgaming.furniture.data.network.dto.CartDto
 import com.nqmgaming.furniture.domain.usecase.UseCase
 
 interface GetCartsByUserIdUseCase :
@@ -8,7 +9,7 @@ interface GetCartsByUserIdUseCase :
         val userId: Int
     )
     sealed class Output {
-        data class Success(val carts: List<String>) : Output()
+        data class Success(val carts: List<CartDto>) : Output()
         data object Failure : Output()
     }
 }
