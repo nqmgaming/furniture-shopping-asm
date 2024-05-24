@@ -3,11 +3,15 @@ package com.nqmgaming.furniture.presentation.main.cart
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.nqmgaming.furniture.domain.mapper.asDomainModel
 import com.nqmgaming.furniture.domain.mapper.asDtoModel
 import com.nqmgaming.furniture.domain.model.cart.Cart
+import com.nqmgaming.furniture.domain.model.product.Product
+import com.nqmgaming.furniture.domain.usecase.cart.AddCartUseCase
+import com.nqmgaming.furniture.domain.usecase.cart.AddIdCartToUserUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.DecrementQuantityCartUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.GetCartByIdUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.GetCartsByUserIdUseCase
@@ -29,6 +33,8 @@ class CartViewModel @Inject constructor(
     private val removeCartItemUseCase: RemoveCartItemUseCase,
     private val incrementQuantityCartUseCase: IncrementQuantityCartUseCase,
     private val decrementQuantityCartUseCase: DecrementQuantityCartUseCase,
+    private val addCartUseCase: AddCartUseCase,
+    private val addIdCartToUserUseCase: AddIdCartToUserUseCase,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -45,7 +51,6 @@ class CartViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            delay(1000)
             getCartList()
             getCartItems(cartIdList.value)
         }
@@ -69,8 +74,14 @@ class CartViewModel @Inject constructor(
         }
     }
 
+    fun onAddToCart(product: Product, color: String, quantity: Int = 1) {
+        viewModelScope.launch {
+            addToCart(product, color, quantity)
+        }
+    }
+
     private suspend fun getCartList() {
-        val result = getCartsByUserIdUseCase.execute(GetCartsByUserIdUseCase.Input(1))
+        val result = getCartsByUserIdUseCase.execute(GetCartsByUserIdUseCase.Input(userId))
         if (result is GetCartsByUserIdUseCase.Output.Success) {
             _cartIdList.value = result.carts
             Log.d("CartScreen", "CartIdList: $cartIdList")
@@ -173,6 +184,57 @@ class CartViewModel @Inject constructor(
 
             // Update total price
             _total.value = _cartList.value.sumOf { it.product.price * it.quantity }
+
+        }
+    }
+
+    private suspend fun addToCart(product: Product, color: String, quantity: Int = 1) {
+
+        // Search product in cartList flow with product id and color
+        val cart = _cartList.value.find {
+            it.product.productId == product.productId
+                    && it.colorString == color
+        }
+
+        // If product is already in cartList flow, increment quantity and total price
+        if (cart != null) {
+            incrementQuantity(cart.cartId.toString())
+            return
+        } else {
+            // Product is not in cartList flow, add product to cart and update total price
+            val result = addCartUseCase.execute(
+                AddCartUseCase.Input(
+                    userId = userId,
+                    productId = product.productId,
+                    quantity = quantity,
+                    colorString = color
+                )
+            )
+
+            if (result is AddCartUseCase.Output.Success) {
+                // Add cart id to list of cart id then insert to user
+                val cartIdList = _cartIdList.value.toMutableList()
+                cartIdList.add(result.cart?.cartId.toString())
+                _cartIdList.value = cartIdList
+                addIdCartToUser(cartIdList)
+
+                // Add cart to cartList flow
+                val cart = result.cart?.asDomainModel()
+                cart?.let {
+                    cart.product = product
+                    _cartList.value += cart
+                }
+
+            }
+            Toast.makeText(getApplication(), "Item added to cart", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private suspend fun addIdCartToUser(cartIdList: List<String>) {
+        val result = addIdCartToUserUseCase.execute(AddIdCartToUserUseCase.Input(userId, cartIdList))
+        if (result is AddIdCartToUserUseCase.Output.Success) {
+            Log.d("CartScreen", "CartIdList added to user")
         }
     }
 

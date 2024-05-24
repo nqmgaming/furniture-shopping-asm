@@ -1,5 +1,7 @@
 package com.nqmgaming.furniture.di
 
+import com.nqmgaming.furniture.domain.usecase.cart.AddCartUseCase
+import com.nqmgaming.furniture.domain.usecase.cart.AddIdCartToUserUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.DecrementQuantityCartUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.GetCartByIdUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.GetCartsByUserIdUseCase
@@ -11,6 +13,8 @@ import com.nqmgaming.furniture.domain.usecase.user.GetUserInfoUseCase
 import com.nqmgaming.furniture.domain.usecase.user.LogInUseCase
 import com.nqmgaming.furniture.domain.usecase.user.SignUpUseCase
 import com.nqmgaming.furniture.domain.usecase.favorite.UpdateFavoritesUseCase
+import com.nqmgaming.furniture.domain.usecase.impl.cart.AddCartUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.cart.AddIdCartToUserUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.cart.DecrementQuantityCartUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.cart.GetCartByIdUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.cart.GetCartsByUserIdUseCaseImpl
@@ -31,6 +35,13 @@ import dagger.hilt.components.SingletonComponent
 @Module
 abstract class UseCaseModule {
 
+    // This is the part for the cart use cases
+    @Binds
+    abstract fun bindAddIdCartToUserUseCase(impl: AddIdCartToUserUseCaseImpl): AddIdCartToUserUseCase
+
+    @Binds
+    abstract fun bindAddCartUseCase(impl: AddCartUseCaseImpl): AddCartUseCase
+
     @Binds
     abstract fun bindDecrementQuantityCartUseCase(impl: DecrementQuantityCartUseCaseImpl): DecrementQuantityCartUseCase
 
@@ -46,15 +57,19 @@ abstract class UseCaseModule {
     @Binds
     abstract fun bindGetCartByIdUseCase(impl: GetCartByIdUseCaseImpl): GetCartByIdUseCase
 
+    // This is the part for the product use cases
     @Binds
     abstract fun bindGetProductByIdUseCase(impl: GetProductByIdUseCaseImpl): GetProductByIdUseCase
 
+    // This is the part for the favorite use cases
     @Binds
     abstract fun bindUpdateFavoritesUseCase(impl: UpdateFavoritesUseCaseImpl): UpdateFavoritesUseCase
 
     @Binds
     abstract fun bindGetFavoriteUseCase(impl: GetFavoritesUseCaseImpl): GetFavoritesUseCase
 
+
+    // This is the part for the user use cases
     @Binds
     abstract fun bindGetUserInfoUseCase(impl: GetUserInfoUseCaseImpl): GetUserInfoUseCase
 

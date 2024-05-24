@@ -7,5 +7,6 @@ data class Cart(
     var quantity: Int,
     val colorString: String,
     val productId: Int,
-    var product: Product = Product()
+    var product: Product = Product(),
+    val userId: Int
 )

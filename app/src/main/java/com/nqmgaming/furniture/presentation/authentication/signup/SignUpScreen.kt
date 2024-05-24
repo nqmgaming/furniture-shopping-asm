@@ -88,13 +88,7 @@ fun SignUpScreen(
     val navigateToAppScreen by viewModel.navigateToAppScreen.collectAsState()
 
     if (navigateToAppScreen) {
-        navController.navigate(Screen.AppRoute.route) {
-            popUpTo(Screen.SignUpScreen.route) {
-                inclusive = true
-            }
-            launchSingleTop = true
-            restoreState = true
-        }
+        navController.navigate(Screen.SplashScreen.route)
     }
     var isPasswordVisualTransformation by remember {
         mutableStateOf(true)

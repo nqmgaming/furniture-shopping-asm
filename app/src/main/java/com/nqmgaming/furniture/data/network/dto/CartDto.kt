@@ -12,5 +12,7 @@ data class CartDto(
     @SerialName("color")
     val colorString: String,
     @SerialName("product_id")
-    val productId: Int
+    val productId: Int,
+    @SerialName("user_id")
+    val userId: Int
 )

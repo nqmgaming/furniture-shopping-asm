@@ -1,20 +1,24 @@
 package com.nqmgaming.furniture.data.repository.impl
 
+import android.util.Log
 import com.nqmgaming.furniture.data.network.dto.CartDto
 import com.nqmgaming.furniture.data.repository.CartRepository
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import java.util.Locale.filter
 import javax.inject.Inject
 
 class CartRepositoryImpl @Inject constructor(
     private val postgrest: Postgrest
 ) : CartRepository {
-    override suspend fun getCartsByUserId(userId: Int): List<String> {
+    override suspend fun getCartsByUserId(userId: Int): List<CartDto> {
         return try {
-            val result = postgrest.from("Users")
+            val result = postgrest.from("Carts")
                 .select(
                     columns = Columns.list(
                         "cart_list"
@@ -23,9 +27,7 @@ class CartRepositoryImpl @Inject constructor(
                     filter {
                         eq("user_id", userId)
                     }
-                }.decodeList<CartList>().flatMap {
-                    it.cartList
-                }
+                }.decodeList<CartDto>()
             result
         } catch (e: Exception) {
             e.printStackTrace()
@@ -44,7 +46,7 @@ class CartRepositoryImpl @Inject constructor(
             result
         } catch (e: Exception) {
             e.printStackTrace()
-            CartDto(-1, -1, "", -1)
+            CartDto(-1, -1, "", -1, -1)
         }
     }
 
@@ -137,37 +139,40 @@ class CartRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addToCart(
-        userId: Int,
         productId: Int,
         quantity: Int,
         colorString: String
-    ) {
-        // Add to Carts then update cart_list in Users
+    ): CartDto? {
         try {
             val result = postgrest.from("Carts")
                 .insert(
-                    CartDto(
-                        cartId = -1,
-                        quantity = quantity,
-                        colorString = colorString,
-                        productId = productId
-                    )
-                ).decodeSingle<CartDto>()
+                    buildJsonObject {
+                        put("product_id", productId)
+                        put("quantity", quantity)
+                        put("color", colorString)
+                    }
+                )
+            val response = Json.decodeFromString<CartDto>(result.data)
+            Log.d("CartRepository", "CartDto: $response")
+            return response
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return null
+        }
+    }
 
-            val cartList = getCartsByUserId(userId).toMutableList()
-            cartList.add(result.cartId.toString())
-
+    override suspend fun addIdCart(userId: Int, cartsId: List<String>) {
+        try {
             postgrest.from("Users")
                 .update(
                     {
-                        set("cart_list", cartList)
+                        set("cart_list", cartsId)
                     }
                 ) {
                     filter {
                         eq("user_id", userId)
                     }
                 }
-
         } catch (e: Exception) {
             e.printStackTrace()
         }

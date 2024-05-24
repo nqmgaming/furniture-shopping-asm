@@ -40,6 +40,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.presentation.Screen
+import com.nqmgaming.furniture.presentation.main.cart.CartViewModel
 import com.nqmgaming.furniture.presentation.main.home.components.CategoryTabBar
 import com.nqmgaming.furniture.presentation.main.home.components.ProductCard
 import com.nqmgaming.furniture.ui.theme.GreyLight
@@ -52,6 +53,7 @@ import com.nqmgaming.furniture.util.TwiceBackHandler
 fun HomeScreen(
     navController: NavController,
     viewModel: HomeViewModel = hiltViewModel(),
+    cartViewModel: CartViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     TwiceBackHandler(
@@ -181,6 +183,7 @@ fun HomeScreen(
                                     ProductCard(
                                         product = product,
                                         onAddToCart = {
+                                            cartViewModel.onAddToCart(product, product.colors[1], 1)
                                         },
                                         onProductClick = {
                                             navController.navigate(
