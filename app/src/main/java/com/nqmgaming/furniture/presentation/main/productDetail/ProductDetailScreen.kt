@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -68,233 +69,241 @@ fun ProductDetailScreen(
     if (isLoading) {
         LoadingDialog()
     }
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-    ) {
-        Box {
-            Box(
-                modifier = Modifier
-                    .padding(start = 20.dp)
+    Box {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(bottom = 40.dp)
+        ) {
+            Box {
+                Box(
+                    modifier = Modifier
+                        .padding(start = 20.dp)
 
-            ) {
-                Card(
-                    modifier = Modifier.padding(start = 40.dp),
-                    shape = RoundedCornerShape(bottomStart = 60.dp),
                 ) {
-                    if (product != null) {
-                        AutoSlidingCarousel(
-                            itemsCount = product.images.size,
-                            itemContent = { index ->
-                                AsyncImage(
-                                    model = ImageRequest.Builder(LocalContext.current)
-                                        .data(product.images[index])
-                                        .build(),
-                                    contentDescription = null,
-                                    contentScale = ContentScale.FillWidth,
-                                    modifier = Modifier.height(450.dp)
+                    Card(
+                        modifier = Modifier.padding(start = 40.dp),
+                        shape = RoundedCornerShape(bottomStart = 60.dp),
+                    ) {
+                        if (product != null) {
+                            AutoSlidingCarousel(
+                                itemsCount = product.images.size,
+                                itemContent = { index ->
+                                    AsyncImage(
+                                        model = ImageRequest.Builder(LocalContext.current)
+                                            .data(product.images[index])
+                                            .build(),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.FillWidth,
+                                        modifier = Modifier.height(450.dp)
+                                    )
+                                }
+                            )
+                        }
+                    }
+
+                    Column(
+                        modifier = Modifier.padding(top = 20.dp)
+                    ) {
+                        Button(
+                            onClick = {
+                                navController?.popBackStack()
+                            },
+                            modifier = Modifier
+                                .size(60.dp)
+                                .width(60.dp)
+                                .height(60.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color.White,
+                                contentColor = Color.Black
+                            ),
+                            elevation = ButtonDefaults.buttonElevation(
+                                defaultElevation = 0.2.dp,
+                                pressedElevation = 0.dp
+                            ),
+                            shape = RoundedCornerShape(20.dp),
+                            content = {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBackIosNew,
+                                    contentDescription = "Back",
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .width(60.dp)
+                                        .height(60.dp)
                                 )
+                            },
+                            contentPadding = PaddingValues(15.dp)
+                        )
+                        var colorSelect by remember { mutableIntStateOf(0) }
+                        SelectColor(
+                            product = product,
+                            selectIndex = colorSelect,
+                            onClick = {
+                                colorSelect = it
                             }
                         )
+
                     }
                 }
 
-                Column(
-                    modifier = Modifier.padding(top = 20.dp)
-                ) {
-                    Button(
-                        onClick = {
-                            navController?.popBackStack()
-                        },
-                        modifier = Modifier
-                            .size(60.dp)
-                            .width(60.dp)
-                            .height(60.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
-                        ),
-                        elevation = ButtonDefaults.buttonElevation(
-                            defaultElevation = 0.2.dp,
-                            pressedElevation = 0.dp
-                        ),
-                        shape = RoundedCornerShape(20.dp),
-                        content = {
-                            Icon(
-                                imageVector = Icons.Default.ArrowBackIosNew,
-                                contentDescription = "Back",
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .width(60.dp)
-                                    .height(60.dp)
-                            )
-                        },
-                        contentPadding = PaddingValues(15.dp)
-                    )
-                    var colorSelect by remember { mutableIntStateOf(0) }
-                    SelectColor(
-                        product = product,
-                        selectIndex = colorSelect,
-                        onClick = {
-                            colorSelect = it
-                        }
-                    )
-
-                }
             }
 
-        }
-
-        Text(
-            text = product?.name ?: "Loading",
-            maxLines = 1,
-            style = TextStyle(
-                color = BlackText,
-                fontSize = 24.sp,
-                lineHeight = 30.sp,
-                fontWeight = FontWeight.Normal,
-                fontFamily = gelasioFont
-            ),
-            modifier = Modifier.padding(start = 20.dp, top = 20.dp)
-        )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            var quantity by remember { mutableIntStateOf(1) }
             Text(
-                text = "$ ${product?.price}",
+                text = product?.name ?: "Loading",
                 maxLines = 1,
                 style = TextStyle(
                     color = BlackText,
-                    fontSize = 30.sp,
-                    lineHeight = 40.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontFamily = nunitoSansFont
+                    fontSize = 24.sp,
+                    lineHeight = 30.sp,
+                    fontWeight = FontWeight.Normal,
+                    fontFamily = gelasioFont
                 ),
+                modifier = Modifier.padding(start = 20.dp, top = 20.dp)
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                var quantity by remember { mutableIntStateOf(1) }
+                Text(
+                    text = "$ ${product?.price}",
+                    maxLines = 1,
+                    style = TextStyle(
+                        color = BlackText,
+                        fontSize = 30.sp,
+                        lineHeight = 40.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontFamily = nunitoSansFont
+                    ),
+                    modifier = Modifier.padding(start = 20.dp, top = 10.dp)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+
+                QuantityButton(
+                    onQuantityIncrease = {
+                        quantity += 1
+                    },
+                    onQuantityDecrease = {
+                        if (quantity > 1) {
+                            quantity -= 1
+                        }
+                    },
+                    quantity = quantity,
+                    modifier = Modifier.padding(end = 20.dp)
+                )
+
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = 20.dp, top = 10.dp)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-
-            QuantityButton(
-                onQuantityIncrease = {
-                    quantity += 1
-                },
-                onQuantityDecrease = {
-                    if (quantity > 1) {
-                        quantity -= 1
-                    }
-                },
-                quantity = quantity,
-                modifier = Modifier.padding(end = 20.dp)
-            )
-
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 20.dp, top = 10.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = stringResource(id = R.string.star),
-                tint = Color(0XFFFFD700),
-            )
-
-            Text(
-                text = "4.5",
-                maxLines = 1,
-                style = TextStyle(
-                    color = BlackText,
-                    fontSize = 18.sp,
-                    lineHeight = 40.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontFamily = nunitoSansFont
-                ),
-                modifier = Modifier.padding(start = 10.dp)
-            )
-
-            Text(
-                text = "(50 reviews)",
-                maxLines = 1,
-                style = TextStyle(
-                    color = GreyText,
-                    fontSize = 16.sp,
-                    lineHeight = 40.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontFamily = nunitoSansFont
-                ),
-                modifier = Modifier.padding(start = 10.dp)
-            )
-
-
-        }
-
-        Text(
-            text = product?.description ?: "Loading",
-            style = TextStyle(
-                color = GreyText,
-                fontSize = 15.sp,
-                lineHeight = 18.sp,
-                fontWeight = FontWeight.ExtraLight,
-                fontFamily = nunitoSansFont
-            ),
-            textAlign = TextAlign.Justify,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
-        )
-
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = {
-                    viewModel.onFavoriteClick()
-                },
-                modifier = Modifier
-                    .padding(start = 20.dp)
-                    .background(QuantityColor, RoundedCornerShape(10.dp))
-                    .size(55.dp),
-                enabled = !isLoading
             ) {
                 Icon(
-                    imageVector = Icons.Default.BookmarkBorder,
-                    contentDescription = stringResource(id = R.string.increment),
-                    tint = if (isFavorite) Color(0XFFFFD700) else Color.White,
-                    modifier = Modifier.size(30.dp)
+                    imageVector = Icons.Default.Star,
+                    contentDescription = stringResource(id = R.string.star),
+                    tint = Color(0XFFFFD700),
                 )
-            }
-            Button(
-                onClick = {
 
-                },
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxSize()
-                    .weight(1f),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Black,
-                    contentColor = Color.White
+                Text(
+                    text = "4.5",
+                    maxLines = 1,
+                    style = TextStyle(
+                        color = BlackText,
+                        fontSize = 18.sp,
+                        lineHeight = 40.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontFamily = nunitoSansFont
+                    ),
+                    modifier = Modifier.padding(start = 10.dp)
+                )
+
+                Text(
+                    text = "(50 reviews)",
+                    maxLines = 1,
+                    style = TextStyle(
+                        color = GreyText,
+                        fontSize = 16.sp,
+                        lineHeight = 40.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontFamily = nunitoSansFont
+                    ),
+                    modifier = Modifier.padding(start = 10.dp)
+                )
+
+
+            }
+
+            Text(
+                text = product?.description ?: "Loading",
+                style = TextStyle(
+                    color = GreyText,
+                    fontSize = 15.sp,
+                    lineHeight = 18.sp,
+                    fontWeight = FontWeight.ExtraLight,
+                    fontFamily = nunitoSansFont
                 ),
-                elevation = ButtonDefaults.buttonElevation(
-                    defaultElevation = 0.2.dp,
-                    pressedElevation = 0.dp
-                ),
-                shape = RoundedCornerShape(20.dp),
-                content = {
-                    Text(
-                        text = "Add to Cart",
-                        style = TextStyle(
-                            color = Color.White,
-                            fontSize = 18.sp,
-                            lineHeight = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = nunitoSansFont
-                        )
-                    )
-                },
-                contentPadding = PaddingValues(15.dp)
+                textAlign = TextAlign.Justify,
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
             )
 
+        }
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                IconButton(
+                    onClick = {
+                        viewModel.onFavoriteClick()
+                    },
+                    modifier = Modifier
+                        .padding(start = 20.dp)
+                        .background(QuantityColor, RoundedCornerShape(10.dp))
+                        .size(55.dp),
+                    enabled = !isLoading
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.BookmarkBorder,
+                        contentDescription = stringResource(id = R.string.increment),
+                        tint = if (isFavorite) Color(0XFFFFD700) else Color.White,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+                Button(
+                    onClick = {
+
+                    },
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .fillMaxWidth()
+                        .weight(1f),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Black,
+                        contentColor = Color.White
+                    ),
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 0.2.dp,
+                        pressedElevation = 0.dp
+                    ),
+                    shape = RoundedCornerShape(20.dp),
+                    content = {
+                        Text(
+                            text = "Add to Cart",
+                            style = TextStyle(
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                lineHeight = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = nunitoSansFont
+                            )
+                        )
+                    },
+                    contentPadding = PaddingValues(15.dp)
+                )
+
+            }
         }
     }
 }

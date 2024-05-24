@@ -64,7 +64,6 @@ fun NavGraphBuilder.appGraph(
             val productId = it.arguments?.getInt("productId")
             Log.d("Navigation", "Navigating to ${Screen.ProductDetailScreen.route}/$productId")
             ProductDetailScreen(
-                productId = productId ?: 0,
                 navController = navController
             )
         }

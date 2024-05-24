@@ -6,6 +6,9 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -74,13 +77,22 @@ fun MainScreen(
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val items = listOf(
+        Screen.HomeScreen.route,
+        Screen.FavoritesScreen.route,
+        Screen.NotificationsScreen.route,
+        Screen.ProfileScreen.route
+    )
+    val currentRoute = currentDestination?.route
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            BottomNavAnimation(
-                screens = BottomNavigationItem().bottomNavigationItems(),
-                navController = navController
-            )
+            if (currentRoute in items) {
+                BottomNavAnimation(
+                    screens = BottomNavigationItem().bottomNavigationItems(),
+                    navController = navController
+                )
+            }
         }
     ) { paddingValues ->
         NavHost(
@@ -88,22 +100,44 @@ fun MainScreen(
             startDestination = Screen.HomeScreen.route,
             modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
-            composable(Screen.HomeScreen.route) {
+            composable(Screen.HomeScreen.route,
+                enterTransition = {
+                    fadeIn(animationSpec = tween(300))
+                },
+                exitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                }
+            ) {
                 HomeScreen(
                     navController
                 )
             }
-            composable(Screen.FavoritesScreen.route) {
+            composable(Screen.FavoritesScreen.route, enterTransition = {
+                fadeIn(animationSpec = tween(300))
+            },
+                exitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                }) {
                 FavoriteScreen(
                     navController
                 )
             }
-            composable(Screen.NotificationsScreen.route) {
+            composable(Screen.NotificationsScreen.route, enterTransition = {
+                fadeIn(animationSpec = tween(300))
+            },
+                exitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                }) {
                 NotificationScreen(
                     navController
                 )
             }
-            composable(Screen.ProfileScreen.route) {
+            composable(Screen.ProfileScreen.route, enterTransition = {
+                fadeIn(animationSpec = tween(300))
+            },
+                exitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                }) {
                 ProfileScreen(
                     navController
                 )
@@ -114,7 +148,13 @@ fun MainScreen(
                     navArgument("productId") {
                         type = NavType.IntType
                     }
-                )
+                ),
+                enterTransition = {
+                    fadeIn(animationSpec = tween(300))
+                },
+                exitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                }
             ) {
                 val productId = it.arguments?.getInt("productId")
                 Log.d("Navigation", "Navigating to ${Screen.ProductDetailScreen.route}/$productId")
