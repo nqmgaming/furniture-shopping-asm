@@ -79,6 +79,8 @@ class CartViewModel @Inject constructor(
             val result = getCartsByUserIdUseCase.execute(GetCartsByUserIdUseCase.Input(userId))
             if (result is GetCartsByUserIdUseCase.Output.Success) {
                 _cartList.value = result.carts.map { it.asDomainModel() }
+                // update total price
+                _total.value = _cartList.value.sumOf { it.product.price * it.quantity }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -128,12 +130,12 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    private suspend fun incrementQuantity(cartId: String) {
+    private suspend fun incrementQuantity(cartId: String, quantity: Int = 1) {
 
         // Increment quantity of cart item in cartList flow
         val cart = _cartList.value.find { it.cartId == cartId.toInt() }
         cart?.let {
-            it.quantity += 1
+            it.quantity += quantity
             _total.value += it.product.price
         }
 
@@ -191,7 +193,7 @@ class CartViewModel @Inject constructor(
 
         // If product is already in cartList flow, increment quantity and total price
         if (cart != null) {
-            incrementQuantity(cart.cartId.toString())
+            incrementQuantity(cart.cartId.toString(), quantity)
             return
         } else {
             // Product is not in cartList flow, add product to cart and update total price

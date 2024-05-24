@@ -130,4 +130,6 @@ dependencies {
     implementation (libs.easyvalidation.toast)
     implementation("androidx.compose.foundation:foundation:1.6.7")
 
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha13")
+
 }

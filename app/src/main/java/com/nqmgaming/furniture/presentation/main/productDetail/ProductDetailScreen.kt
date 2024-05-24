@@ -1,5 +1,6 @@
 package com.nqmgaming.furniture.presentation.main.productDetail
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,6 +50,7 @@ import coil.request.ImageRequest
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.common.components.LoadingDialog
 import com.nqmgaming.furniture.common.components.QuantityButton
+import com.nqmgaming.furniture.presentation.main.cart.CartViewModel
 import com.nqmgaming.furniture.presentation.main.productDetail.components.AutoSlidingCarousel
 import com.nqmgaming.furniture.presentation.main.productDetail.components.SelectColor
 import com.nqmgaming.furniture.ui.theme.BlackText
@@ -62,13 +64,17 @@ fun ProductDetailScreen(
     navController: NavController?,
     modifier: Modifier = Modifier,
     viewModel: ProductDetailViewModel = hiltViewModel(),
+    cartViewModel: CartViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val product = viewModel.product.collectAsState().value
     val isFavorite by viewModel.isFavorite.collectAsState(initial = false)
     val isLoading by viewModel.isLoading.collectAsState(initial = false)
     if (isLoading) {
         LoadingDialog()
     }
+    var quantity by remember { mutableIntStateOf(1) }
+    var colorSelect by remember { mutableIntStateOf(0) }
     Box {
         Column(
             modifier = modifier
@@ -135,7 +141,6 @@ fun ProductDetailScreen(
                             },
                             contentPadding = PaddingValues(15.dp)
                         )
-                        var colorSelect by remember { mutableIntStateOf(0) }
                         SelectColor(
                             product = product,
                             selectIndex = colorSelect,
@@ -164,7 +169,6 @@ fun ProductDetailScreen(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                var quantity by remember { mutableIntStateOf(1) }
                 Text(
                     text = "$ ${product?.price}",
                     maxLines = 1,
@@ -273,7 +277,12 @@ fun ProductDetailScreen(
                 }
                 Button(
                     onClick = {
-
+                        cartViewModel.onAddToCart(
+                            product = product!!,
+                            color = product.colors[colorSelect],
+                            quantity = quantity
+                        )
+                        Toast.makeText(context, "Item added to cart", Toast.LENGTH_SHORT).show()
                     },
                     modifier = Modifier
                         .padding(20.dp)

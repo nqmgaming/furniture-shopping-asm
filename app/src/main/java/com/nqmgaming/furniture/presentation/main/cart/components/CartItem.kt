@@ -1,6 +1,7 @@
 package com.nqmgaming.furniture.presentation.main.cart.components
 
 import android.util.Log
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -78,13 +79,18 @@ fun CartItem(
                 modifier = Modifier
                     .height(100.dp)
                     .width(100.dp)
-                    .clip(RoundedCornerShape(10.dp)),
+                    .clip(RoundedCornerShape(10.dp))
+                    .border(
+                        BorderStroke(4.dp, cartItem.product.colorFromString(cartItem.colorString)),
+                        RoundedCornerShape(10.dp)
+                    ),
                 contentScale = ContentScale.Crop,
             )
             Column(
                 verticalArrangement = Arrangement.spacedBy(42.dp)
             ) {
-                Row {
+
+                Row() {
                     Text(
                         text = cartItem.product.name,
                         style = TextStyle(
@@ -122,6 +128,7 @@ fun CartItem(
                         )
                     }
                 }
+
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
