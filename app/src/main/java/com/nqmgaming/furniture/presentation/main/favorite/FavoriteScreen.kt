@@ -42,6 +42,7 @@ import androidx.navigation.compose.rememberNavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.common.components.LoadingDialog
 import com.nqmgaming.furniture.presentation.Screen
+import com.nqmgaming.furniture.presentation.main.cart.CartViewModel
 import com.nqmgaming.furniture.presentation.main.favorite.components.FavoriteCard
 import com.nqmgaming.furniture.ui.theme.GreyLight
 import com.nqmgaming.furniture.ui.theme.PrimaryColor
@@ -53,7 +54,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun FavoriteScreen(
     navController: NavController,
-    viewModel: FavoriteViewModel = hiltViewModel()
+    viewModel: FavoriteViewModel = hiltViewModel(),
+    cartViewModel: CartViewModel = hiltViewModel()
 ) {
     val isLoading by viewModel.isLoading.collectAsState(initial = false)
     if (isLoading) {
@@ -134,7 +136,9 @@ fun FavoriteScreen(
             }
         }
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                cartViewModel.onAddAllToCart(favoritesList)
+            },
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth()

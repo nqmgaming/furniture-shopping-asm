@@ -27,8 +27,6 @@ import javax.inject.Inject
 @HiltViewModel
 class CartViewModel @Inject constructor(
     private val getCartsByUserIdUseCase: GetCartsByUserIdUseCase,
-    private val getCartByIdUseCase: GetCartByIdUseCase,
-    private val getProductByIdUseCase: GetProductByIdUseCase,
     private val removeCartItemUseCase: RemoveCartItemUseCase,
     private val incrementQuantityCartUseCase: IncrementQuantityCartUseCase,
     private val decrementQuantityCartUseCase: DecrementQuantityCartUseCase,
@@ -74,6 +72,15 @@ class CartViewModel @Inject constructor(
         }
     }
 
+    fun onAddAllToCart(product: List<Product>, quantity: Int = 1) {
+        Toast.makeText(getApplication(), "Adding to cart click", Toast.LENGTH_SHORT).show()
+        viewModelScope.launch {
+            product.forEach {
+                addToCart(it, it.colors.first(), quantity)
+            }
+        }
+    }
+
     private suspend fun getCartList() {
         try {
             val result = getCartsByUserIdUseCase.execute(GetCartsByUserIdUseCase.Input(userId))
@@ -87,27 +94,6 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getCartItems(listId: List<String>) {
-        val cartList = mutableListOf<Cart>()
-        listId.forEach {
-            val result = getCartByIdUseCase.execute(GetCartByIdUseCase.Input(it))
-            if (result is GetCartByIdUseCase.Output.Success) {
-                cartList.add(result.cart.asDomainModel())
-
-                // Get product by id
-                val productResult =
-                    getProductByIdUseCase.execute(GetProductByIdUseCase.Input(result.cart.productId))
-                if (productResult is GetProductByIdUseCase.Output.Success) {
-                    cartList.last().product = productResult.product.asDomainModel()
-                }
-
-            }
-        }
-        _total.value = cartList.sumOf { it.product.price * it.quantity }
-        _cartList.value = cartList
-        Log.d("CartScreen", "Total: $total")
-        Log.d("CartScreen", "CartList: $cartList")
-    }
 
     private suspend fun removeCartItem(cartId: String, cart: Cart) {
 
@@ -215,7 +201,8 @@ class CartViewModel @Inject constructor(
                 _total.value += product.price * quantity
 
             }
-            Toast.makeText(getApplication(), "Item added to cart", Toast.LENGTH_SHORT).show()
+            else if (result is AddCartUseCase.Output.Error)
+                Toast.makeText(getApplication(), "Item already in cart error", Toast.LENGTH_SHORT).show()
         }
 
     }
