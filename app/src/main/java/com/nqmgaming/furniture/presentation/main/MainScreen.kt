@@ -62,6 +62,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.nqmgaming.furniture.navigation.authGraph
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.favorite.FavoriteScreen
 import com.nqmgaming.furniture.presentation.main.home.HomeScreen
@@ -100,6 +101,7 @@ fun MainScreen(
             startDestination = Screen.HomeScreen.route,
             modifier = Modifier.padding(paddingValues = paddingValues)
         ) {
+            authGraph(navController = navController)
             composable(Screen.HomeScreen.route,
                 enterTransition = {
                     fadeIn(animationSpec = tween(300))

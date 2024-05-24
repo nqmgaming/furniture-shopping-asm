@@ -20,7 +20,7 @@
     <string name="home">Home</string>
     <string name="favorites">Favorites</string>
     <string name="notifications">Notifications</string>
-    <string name="profile">Profile\n</string>
+    <string name="profile">Profile</string>
     <string name="search">Search</string>
     <string name="cart">Cart</string>
     <string name="make_home">Make home</string>
@@ -32,4 +32,6 @@
     <string name="star">Star</string>
     <string name="remove">Remove from favorite</string>
     <string name="space">Space</string>
+    <string name="logout_message">Are you sure want to logout?</string>
+    <string name="log_out">Log out</string>
 </resources>
