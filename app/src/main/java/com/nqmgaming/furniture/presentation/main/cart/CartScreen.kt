@@ -48,6 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.nqmgaming.furniture.R
+import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.cart.components.CartItem
 import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.GreyText
@@ -273,7 +274,7 @@ fun CartScreen(
             }
             Button(
                 onClick = {
-
+                    navController.navigate(Screen.CheckoutScreen.route + "/${total.toFloat()}")
                 },
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 40.dp)

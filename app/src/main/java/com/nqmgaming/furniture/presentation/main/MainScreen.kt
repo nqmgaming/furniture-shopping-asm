@@ -65,6 +65,7 @@ import androidx.navigation.navArgument
 import com.nqmgaming.furniture.navigation.authGraph
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.cart.CartScreen
+import com.nqmgaming.furniture.presentation.main.checkout.CheckoutScreen
 import com.nqmgaming.furniture.presentation.main.favorite.FavoriteScreen
 import com.nqmgaming.furniture.presentation.main.home.HomeScreen
 import com.nqmgaming.furniture.presentation.main.notification.NotificationScreen
@@ -178,6 +179,26 @@ fun MainScreen(
                     navController = navController
                 )
             }
+
+            composable(
+                route = Screen.CheckoutScreen.route + "/{total}",
+                arguments = listOf(
+                    navArgument("total") {
+                        type = NavType.FloatType
+                    }
+                ),
+                enterTransition = {
+                    fadeIn(animationSpec = tween(300))
+                },
+                exitTransition = {
+                    fadeOut(animationSpec = tween(300))
+                }
+            ) {
+                val totalPrice = it.arguments?.getFloat("total")
+                Log.d("Navigation", "Navigating to ${Screen.CheckoutScreen.route}/$totalPrice")
+                CheckoutScreen(navController = navController)
+            }
+
         }
     }
 }
