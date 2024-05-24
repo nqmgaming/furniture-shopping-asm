@@ -137,7 +137,6 @@ class CartViewModel @Inject constructor(
             _total.value += it.product.price
         }
 
-
         val result = incrementQuantityCartUseCase.execute(
             IncrementQuantityCartUseCase.Input(
                 cartId = cartId,
@@ -146,11 +145,11 @@ class CartViewModel @Inject constructor(
         )
 
         if (result is IncrementQuantityCartUseCase.Output.Success) {
-            Toast.makeText(getApplication(), "Item quantity increased", Toast.LENGTH_SHORT).show()
+            // Update total price
+            _total.value = _cartList.value.sumOf { it.product.price * it.quantity }
         }
 
-        // Update total price
-        _total.value = _cartList.value.sumOf { it.product.price * it.quantity }
+
     }
 
     private suspend fun decrementQuantity(cartId: String) {
@@ -174,12 +173,10 @@ class CartViewModel @Inject constructor(
             )
 
             if (result is DecrementQuantityCartUseCase.Output.Success) {
-                Toast.makeText(getApplication(), "Item quantity decreased", Toast.LENGTH_SHORT)
-                    .show()
+                // Update total price
+                _total.value = _cartList.value.sumOf { it.product.price * it.quantity }
             }
 
-            // Update total price
-            _total.value = _cartList.value.sumOf { it.product.price * it.quantity }
 
         }
     }

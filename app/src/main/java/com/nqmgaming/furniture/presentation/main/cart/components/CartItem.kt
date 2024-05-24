@@ -1,5 +1,6 @@
 package com.nqmgaming.furniture.presentation.main.cart.components
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -53,6 +54,7 @@ fun CartItem(
     onQuantityDecrease: (Cart) -> Unit = {},
     onQuantityIncrease: (Cart) -> Unit = {}
 ) {
+    Log.d("CartItem", "CartItem Total: $total")
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -136,7 +138,7 @@ fun CartItem(
                     )
 
                     Text(
-                        text = "$ ${total}",
+                        text = "$ ${cartItem.product.price * cartItem.quantity}",
                         style = TextStyle(
                             fontFamily = nunitoSansBoldFont,
                             color = BlackText,
