@@ -122,7 +122,6 @@ fun FavoriteScreen(
                         viewModel.onDeletedFavorite(it)
                     },
                     onAddFavoriteToBagClick = {
-                        Log.d("FavoriteScreen", "onAddFavoriteToBagClick: $it")
                         cartViewModel.onAddToCart(it, it.colors.first())
                     }
                 )

@@ -109,8 +109,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.json.okio)
 
-    // https://coil-kt.github.io/coil/changelog/
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    // Coil
+    implementation(libs.coil.kt.coil.compose)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -124,12 +124,13 @@ dependencies {
     implementation(libs.slf4j.api)
     implementation(libs.slf4j.simple)
 
+    // EasyValidation
     implementation (libs.easyvalidation.core)
 
-    // Shows Toasts by default for every validation error
-    implementation (libs.easyvalidation.toast)
-    implementation("androidx.compose.foundation:foundation:1.6.7")
+    // Foundation
+    implementation(libs.androidx.foundation)
 
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0-alpha13")
+    // ConstraintLayout
+    implementation(libs.androidx.constraintlayout.compose)
 
 }
