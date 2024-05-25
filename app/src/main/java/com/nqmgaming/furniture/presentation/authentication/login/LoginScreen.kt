@@ -91,7 +91,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
     val navigateToAppScreen by viewModel.navigateToAppScreen.collectAsState()
 
     if (navigateToAppScreen) {
-        navController.navigate(Screen.HomeScreen.route) {
+        navController.navigate(Screen.SplashScreen.route) {
             popUpTo(Screen.SignUpScreen.route) {
                 inclusive = true
             }
