@@ -17,39 +17,28 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.common.components.LoadingDialog
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.cart.CartViewModel
 import com.nqmgaming.furniture.presentation.main.favorite.components.FavoriteCard
-import com.nqmgaming.furniture.ui.theme.GreyLight
 import com.nqmgaming.furniture.ui.theme.PrimaryColor
 import com.nqmgaming.furniture.ui.theme.gelasioFont
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
-import com.nqmgaming.furniture.util.SharedPrefUtils
-import kotlinx.coroutines.launch
 
 @Composable
 fun FavoriteScreen(
@@ -131,6 +120,10 @@ fun FavoriteScreen(
                     },
                     onDeleteFavoriteClick = {
                         viewModel.onDeletedFavorite(it)
+                    },
+                    onAddFavoriteToBagClick = {
+                        Log.d("FavoriteScreen", "onAddFavoriteToBagClick: $it")
+                        cartViewModel.onAddToCart(it, it.colors.first())
                     }
                 )
             }

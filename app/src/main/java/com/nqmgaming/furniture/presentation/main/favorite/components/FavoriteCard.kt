@@ -135,10 +135,7 @@ fun FavoriteCard(
                         .background(
                             color = GreyText,
                             shape = RoundedCornerShape(10.dp)
-                        )
-                        .clickable {
-                            onAddFavoriteToBagClick(product)
-                        },
+                        ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -149,6 +146,7 @@ fun FavoriteCard(
                         modifier = Modifier
                             .size(20.dp)
                             .clickable {
+                                onAddFavoriteToBagClick(product)
                             },
                         tint = WhiteText
                     )

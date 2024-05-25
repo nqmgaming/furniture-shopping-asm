@@ -67,6 +67,7 @@ class CartViewModel @Inject constructor(
     }
 
     fun onAddToCart(product: Product, color: String, quantity: Int = 1) {
+        Toast.makeText(getApplication(), "Adding to cart click", Toast.LENGTH_SHORT).show()
         viewModelScope.launch {
             addToCart(product, color, quantity)
         }
