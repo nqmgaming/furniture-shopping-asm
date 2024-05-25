@@ -91,7 +91,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
     val navigateToAppScreen by viewModel.navigateToAppScreen.collectAsState()
 
     if (navigateToAppScreen) {
-        navController.navigate(Screen.AppRoute.route) {
+        navController.navigate(Screen.HomeScreen.route) {
             popUpTo(Screen.SignUpScreen.route) {
                 inclusive = true
             }
@@ -211,7 +211,6 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                     modifier = Modifier.padding(vertical = 20.dp)
                 )
                 Button(
-                    // TODO: Check if the email and password are correct
                     onClick = {
                         viewModel.onLoginClick()
                     },

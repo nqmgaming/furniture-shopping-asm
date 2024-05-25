@@ -1,11 +1,13 @@
 package com.nqmgaming.furniture.data.repository.impl
 
+import com.nqmgaming.furniture.data.network.dto.CartDto
 import com.nqmgaming.furniture.data.network.dto.UserDto
 import com.nqmgaming.furniture.data.repository.AuthenticationRepository
 import io.github.jan.supabase.gotrue.Auth
 import javax.inject.Inject
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.Postgrest
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import java.util.UUID
@@ -54,14 +56,6 @@ class AuthenticationRepositoryImpl
                     put("name", name)
                 }
             }
-            if (signup != null) {
-                postgrest["Users"].insert(
-                    buildJsonObject {
-                        put("email", email)
-                        put("name", name)
-                    }
-                )
-            }
             true
         } catch (e: Exception) {
             e.printStackTrace()
@@ -69,15 +63,15 @@ class AuthenticationRepositoryImpl
         }
     }
 
-    override suspend fun insertUser(email: String, name: String): Boolean {
+    override suspend fun insertUser(email: String, name: String) {
         return try {
-            postgrest["Users"].insert(
+            val response = postgrest["Users"].insert(
                 buildJsonObject {
                     put("email", email)
                     put("name", name)
                 }
             )
-            true
+
         } catch (e: java.lang.Exception) {
             throw e
         }

@@ -9,6 +9,7 @@ import com.nqmgaming.furniture.presentation.authentication.login.LoginScreen
 import com.nqmgaming.furniture.presentation.authentication.onboarding.OnboardingScreen
 import com.nqmgaming.furniture.presentation.authentication.signup.SignUpScreen
 import com.nqmgaming.furniture.presentation.authentication.splash.SplashScreen
+import com.nqmgaming.furniture.presentation.main.MainScreen
 
 fun NavGraphBuilder.authGraph(
     navController: NavController
@@ -79,6 +80,11 @@ fun NavGraphBuilder.authGraph(
 //                            }
         ) {
             SplashScreen(navController = navController)
+        }
+        composable(
+            Screen.MainScreen.route
+        ) {
+            MainScreen(navController = navController)
         }
     }
 

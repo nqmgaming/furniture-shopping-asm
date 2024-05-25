@@ -12,7 +12,7 @@ interface AddCartUseCase : UseCase<AddCartUseCase.Input, AddCartUseCase.Output> 
     )
 
     sealed class Output {
-        data class Success(val cart: CartDto?) : Output()
+        data object Success : Output()
         data object Error : Output()
     }
 }

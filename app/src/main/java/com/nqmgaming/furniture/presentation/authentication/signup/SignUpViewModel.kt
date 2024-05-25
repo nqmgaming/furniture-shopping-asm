@@ -4,6 +4,8 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.nqmgaming.furniture.domain.usecase.user.CreateUserUseCase
+import com.nqmgaming.furniture.domain.usecase.user.GetUserInfoUseCase
 import com.nqmgaming.furniture.domain.usecase.user.SignUpUseCase
 import com.nqmgaming.furniture.util.SharedPrefUtils
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
@@ -16,6 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
+    private val createUserUseCase: CreateUserUseCase,
+    private val getUserInfoUseCase: GetUserInfoUseCase,
     application: Application
 ) : AndroidViewModel(application) {
     val navigateToAppScreen = MutableStateFlow(false)
@@ -143,22 +147,51 @@ class SignUpViewModel @Inject constructor(
                     )
                     when (result) {
                         is SignUpUseCase.Output.Success -> {
-                            _message.emit("Account created successfully!")
-                            _isLoading.emit(false)
-                            navigateToAppScreen.emit(true)
-                            SharedPrefUtils.saveUserDetails(
-                                getApplication(),
-                                userId = 1,
-                                email = _email.value,
-                                name = _name.value
+                            val user = createUserUseCase.execute(
+                                CreateUserUseCase.Input(
+                                    email = _email.value.trim(),
+                                    name = _name.value.trim()
+                                )
                             )
-                            Log.d("SignUpViewModel", "onSignUp: Account created successfully!")
+                            when (user) {
+                                is CreateUserUseCase.Output.Success -> {
+                                    val userInfo = getUserInfoUseCase.execute(
+                                        GetUserInfoUseCase.Input(
+                                            email = _email.value.trim()
+                                        )
+                                    )
+                                   when (userInfo) {
+                                            is GetUserInfoUseCase.Output.Success -> {
+                                                SharedPrefUtils.saveUserDetails(
+                                                    getApplication(),
+                                                    userId = userInfo.user.userId,
+                                                    email = userInfo.user.email,
+                                                    name = userInfo.user.name
+                                                )
+                                                navigateToAppScreen.emit(true)
+                                                _isLoading.emit(false)
+                                            }
+                                            GetUserInfoUseCase.Output.Failure -> {
+                                                _message.emit("Create account failed !")
+                                                _errorDetails.emit("Email or password is incorrecttt")
+                                                _isLoading.emit(false)
+                                                Log.d("SignUpViewModel", "onSignUp: Create account failed !")
+                                            }
+                                        }
+                                }
+                                is CreateUserUseCase.Output.Error -> {
+                                    _message.emit("Create account failed !")
+                                    _errorDetails.emit("Email or password is incorrecttt")
+                                    _isLoading.emit(false)
+                                    Log.d("SignUpViewModel", "onSignUp: Create account failed !")
+                                }
+                            }
                         }
 
                         else -> {
                             _message.emit("Create account failed !")
                             // Add error details here
-                            _errorDetails.emit("Email or password is incorrect")
+                            _errorDetails.emit("Email or password is incorrecttt")
                             _isLoading.emit(false)
                             Log.d("SignUpViewModel", "onSignUp: Create account failed !")
                         }

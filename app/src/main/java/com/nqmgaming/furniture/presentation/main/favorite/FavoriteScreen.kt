@@ -29,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
@@ -59,7 +60,9 @@ fun FavoriteScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding()
         ) {
             item {
                 Row(
@@ -132,7 +135,7 @@ fun FavoriteScreen(
                 cartViewModel.onAddAllToCart(favoritesList)
             },
             modifier = Modifier
-                .padding(20.dp)
+                .padding(horizontal = 20.dp)
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
             colors = ButtonDefaults.buttonColors(

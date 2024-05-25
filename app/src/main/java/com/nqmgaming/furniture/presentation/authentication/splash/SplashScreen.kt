@@ -1,5 +1,6 @@
 package com.nqmgaming.furniture.presentation.authentication.splash
 
+import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,6 +14,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.nqmgaming.furniture.MainActivity
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.home.HomeViewModel
@@ -52,9 +54,13 @@ fun SplashScreen(
         withContext(Dispatchers.Main) {
             delay(3000)
             if (isLogin) {
-                navController.navigate(Screen.MainScreen.route)
+                navController.navigate(Screen.HomeScreen.route) {
+                    popUpTo(Screen.SplashScreen.route) {
+                        inclusive = true
+                    }
+                }
             } else {
-                navController.navigate(Screen.AuthRoute.route)
+                navController.navigate(Screen.OnboardingScreen.route)
             }
 
         }

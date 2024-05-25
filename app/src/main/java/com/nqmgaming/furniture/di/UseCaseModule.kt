@@ -24,6 +24,8 @@ import com.nqmgaming.furniture.domain.usecase.impl.user.GetUserInfoUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.user.LogInUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.user.SignUpUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.favorite.UpdateFavoritesUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.user.CreateUserUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.user.CreateUserUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -74,4 +76,7 @@ abstract class UseCaseModule {
 
     @Binds
     abstract fun bindLogInUseCase(impl: LogInUseCaseImpl): LogInUseCase
+
+    @Binds
+    abstract fun bindInsertUserUseCase(impl: CreateUserUseCaseImpl): CreateUserUseCase
 }

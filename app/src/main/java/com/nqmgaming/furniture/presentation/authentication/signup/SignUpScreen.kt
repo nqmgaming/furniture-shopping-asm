@@ -88,7 +88,13 @@ fun SignUpScreen(
     val navigateToAppScreen by viewModel.navigateToAppScreen.collectAsState()
 
     if (navigateToAppScreen) {
-        navController.navigate(Screen.SplashScreen.route)
+        navController.navigate(Screen.SplashScreen.route){
+            popUpTo(Screen.LoginScreen.route) {
+                inclusive = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
     }
     var isPasswordVisualTransformation by remember {
         mutableStateOf(true)
@@ -258,9 +264,6 @@ fun SignUpScreen(
                     onClick = {
                         viewModel.onSignUp()
                         localSoftwareKeyboardController?.hide()
-
-                        // Navigate to the App Screen
-
                     },
                     modifier = Modifier
                         .width(280.dp)

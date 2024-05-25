@@ -15,7 +15,7 @@ class AddCartUseCaseImpl @Inject constructor(
                 input.colorString,
                 input.userId
             )
-            AddCartUseCase.Output.Success(result)
+            AddCartUseCase.Output.Success
         } catch (e: Exception) {
             AddCartUseCase.Output.Error
         }

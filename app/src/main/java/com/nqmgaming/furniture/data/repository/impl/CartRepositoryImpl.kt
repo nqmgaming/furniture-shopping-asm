@@ -122,7 +122,7 @@ class CartRepositoryImpl @Inject constructor(
         quantity: Int,
         colorString: String,
         userId: Int
-    ): CartDto? {
+    ) {
         try {
             val result = postgrest.from("Carts")
                 .insert(
@@ -133,18 +133,11 @@ class CartRepositoryImpl @Inject constructor(
                         put("user_id", userId)
                     }
                 )
-            val response = Json.decodeFromString<CartDto>(result.data)
-            Log.d("CartRepository", "CartDto: $response")
-            return response
         } catch (e: Exception) {
             e.printStackTrace()
-            return null
         }
     }
 
 
 
 }
-
-@Serializable
-data class CartList(@SerialName("cart_list") val cartList: List<String>)

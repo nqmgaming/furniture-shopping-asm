@@ -17,6 +17,11 @@
         android:theme="@style/Theme.FurnitureShopping"
         tools:targetApi="tiramisu">
         <activity
+            android:name=".presentation.authentication.splash.SplashActivity"
+            android:exported="false"
+            android:label="@string/title_activity_onboarding"
+            android:theme="@style/Theme.FurnitureShopping" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

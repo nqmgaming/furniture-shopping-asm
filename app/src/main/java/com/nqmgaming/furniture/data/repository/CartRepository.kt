@@ -9,5 +9,5 @@ interface CartRepository {
     suspend fun decreaseCartItem(cartId: String, quantity: Int)
     suspend fun increaseCartItem(cartId: String, quantity: Int)
     suspend fun removeAllFromCart(cartId: String)
-    suspend fun addToCart(productId: Int, quantity: Int, colorString: String, userId: Int): CartDto?
+    suspend fun addToCart(productId: Int, quantity: Int, colorString: String, userId: Int)
 }

@@ -41,7 +41,8 @@ fun ItemProfile(
             .padding(bottom = 20.dp)
             .clickable {
                 onClick()
-            },
+            }
+        ,
         colors = CardDefaults.cardColors(
             containerColor = WhiteText
         ),
