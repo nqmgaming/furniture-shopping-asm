@@ -38,4 +38,5 @@
     <string name="title_activity_splash_avtivity">SplashAvtivity</string>
     <string name="remove_cart">Remove Cart</string>
     <string name="title_activity_onboarding">OnboardingActivity</string>
+    <string name="password_toggle">Toggle password</string>
 </resources>

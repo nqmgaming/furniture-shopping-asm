@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -62,6 +63,8 @@ import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltViewModel()) {
 
     val context = LocalContext.current
+
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     val email = viewModel.email.collectAsState(initial = "")
     val emailError = viewModel.emailError.collectAsState(initial = "")
@@ -176,7 +179,6 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                     imeAction = ImeAction.Next,
                     unfocusedContainerColor = WhiteText,
                     focusedContainerColor = WhiteText,
-                    isPassword = false,
                     errorDetail = emailError.value,
                 )
 
@@ -187,7 +189,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                     leadingIcon = Icons.Outlined.Lock,
                     singleLine = true,
                     keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Next,
+                    imeAction = ImeAction.Done,
                     unfocusedContainerColor = WhiteText,
                     focusedContainerColor = WhiteText,
                     isPassword = isPasswordVisualTransformation,
@@ -195,6 +197,9 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                         isPasswordVisualTransformation = !isPasswordVisualTransformation
                     },
                     errorDetail = passwordError.value,
+                    onDone = {
+                        keyboardController?.hide()
+                    }
                 )
 
                 Text(
@@ -212,7 +217,9 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                 )
                 Button(
                     onClick = {
-                        viewModel.onLoginClick()
+                        viewModel.onLoginClick().also {
+                            keyboardController?.hide()
+                        }
                     },
                     modifier = Modifier
                         .width(280.dp)

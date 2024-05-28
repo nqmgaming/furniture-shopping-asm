@@ -87,8 +87,10 @@ fun SignUpScreen(
 
     val navigateToAppScreen by viewModel.navigateToAppScreen.collectAsState()
 
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     if (navigateToAppScreen) {
-        navController.navigate(Screen.SplashScreen.route){
+        navController.navigate(Screen.SplashScreen.route) {
             popUpTo(Screen.LoginScreen.route) {
                 inclusive = true
             }
@@ -193,7 +195,6 @@ fun SignUpScreen(
                     imeAction = ImeAction.Next,
                     unfocusedContainerColor = WhiteText,
                     focusedContainerColor = WhiteText,
-                    isPassword = false,
                     errorDetail = nameError
                 )
 
@@ -207,7 +208,6 @@ fun SignUpScreen(
                     imeAction = ImeAction.Next,
                     unfocusedContainerColor = WhiteText,
                     focusedContainerColor = WhiteText,
-                    isPassword = false,
                     errorDetail = emailError
                 )
 
@@ -243,6 +243,9 @@ fun SignUpScreen(
                     onPasswordToggleClick = {
                         isConfirmPasswordVisualTransformation =
                             !isConfirmPasswordVisualTransformation
+                    },
+                    onDone = {
+                        keyboardController?.hide()
                     }
                 )
 
@@ -259,11 +262,11 @@ fun SignUpScreen(
                     ),
                     modifier = Modifier.padding(vertical = 20.dp)
                 )
-                val localSoftwareKeyboardController = LocalSoftwareKeyboardController.current
                 Button(
                     onClick = {
-                        viewModel.onSignUp()
-                        localSoftwareKeyboardController?.hide()
+                        viewModel.onSignUp().also {
+                            keyboardController?.hide()
+                        }
                     },
                     modifier = Modifier
                         .width(280.dp)

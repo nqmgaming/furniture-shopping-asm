@@ -1,7 +1,9 @@
 package com.nqmgaming.furniture.common.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -9,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -38,9 +42,10 @@ fun CustomTextField(
     imeAction: ImeAction,
     unfocusedContainerColor: Color,
     focusedContainerColor: Color,
-    isPassword: Boolean = false,
+    isPassword: Boolean? = null,
     onPasswordToggleClick: (() -> Unit)? = null,
-    errorDetail: String? = null
+    errorDetail: String? = null,
+    onDone: () -> Unit = {}
 ) {
     TextField(
         value = value,
@@ -61,23 +66,34 @@ fun CustomTextField(
                 imageVector = leadingIcon, contentDescription = placeholder
             )
         },
+        visualTransformation = if (isPassword == true) PasswordVisualTransformation() else VisualTransformation.None,
         trailingIcon = {
-            if (isPassword) {
-                IconButton(onClick = { onPasswordToggleClick?.invoke() }) {
+            if (isPassword != null) {
+                var showPassword = remember { mutableStateOf(isPassword) }
+                IconButton(onClick = {
+                    showPassword.value = !showPassword.value
+                    onPasswordToggleClick?.invoke()
+                    Log.d("CustomTextField", "showPassword: ${showPassword.value}")
+                }) {
                     Icon(
-                        painter = painterResource(id = if (isPassword) R.drawable.ic_hide else R.drawable.ic_show),
+                        painter = painterResource(id = if (showPassword.value) R.drawable.ic_hide else R.drawable.ic_show),
                         contentDescription = stringResource(
-                            id = if (isPassword) R.string.hide_password else R.string.show_password
+                            id = if (showPassword.value) R.string.hide_password else R.string.show_password
                         )
                     )
                 }
             }
         },
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         singleLine = singleLine,
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType,
             imeAction = imeAction,
+
+            ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                onDone()
+            }
         ),
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = unfocusedContainerColor,
