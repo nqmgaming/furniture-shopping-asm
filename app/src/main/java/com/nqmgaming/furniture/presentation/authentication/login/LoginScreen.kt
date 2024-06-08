@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -65,6 +66,8 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
     val context = LocalContext.current
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    val focusManager = LocalFocusManager.current
 
     val email = viewModel.email.collectAsState(initial = "")
     val emailError = viewModel.emailError.collectAsState(initial = "")
@@ -198,7 +201,9 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = hiltVi
                     },
                     errorDetail = passwordError.value,
                     onDone = {
-                        keyboardController?.hide()
+                        keyboardController?.hide().also {
+                            focusManager.clearFocus()
+                        }
                     }
                 )
 

@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -72,6 +73,8 @@ fun SignUpScreen(
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+
+    val focusManager = LocalFocusManager.current
 
     val name = viewModel.name.collectAsState(initial = "")
     val nameError by viewModel.nameError.collectAsState()
@@ -245,7 +248,9 @@ fun SignUpScreen(
                             !isConfirmPasswordVisualTransformation
                     },
                     onDone = {
-                        keyboardController?.hide()
+                        keyboardController?.hide().also {
+                            focusManager.clearFocus()
+                        }
                     }
                 )
 
