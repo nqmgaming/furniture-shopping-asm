@@ -133,4 +133,6 @@ dependencies {
     // ConstraintLayout
     implementation(libs.androidx.constraintlayout.compose)
 
+    implementation(libs.androidx.animation.v170beta01)
+
 }

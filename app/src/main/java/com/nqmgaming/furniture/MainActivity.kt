@@ -5,6 +5,9 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -12,6 +15,10 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -81,6 +88,7 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var supabaseClient: SupabaseClient
+    @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -115,166 +123,152 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { paddingValues ->
-                    NavHost(
-                        navController = navController,
-                        startDestination = starrDestination,
-                        modifier = Modifier.padding(paddingValues),
-                    ) {
-                        composable(
-                            Screen.SplashScreen.route
+                    SharedTransitionLayout {
+                        NavHost(
+                            navController = navController,
+                            startDestination = starrDestination,
+                            modifier = Modifier.padding(paddingValues),
                         ) {
-                            SplashScreen(navController)
-                        }
-                        composable(
-                            Screen.OnboardingScreen.route,
-                            enterTransition = {
-                                return@composable fadeIn(tween(1000))
-                            },
-                            exitTransition = {
-                                return@composable fadeOut(tween(1000))
-                            }
-                        ) {
-                            OnboardingScreen(navController)
-                        }
-                        composable(Screen.HomeScreen.route,
-                            enterTransition = {
-                                fadeIn(animationSpec = tween(300))
-                            },
-                            exitTransition = {
-                                fadeOut(animationSpec = tween(300))
-                            }
-                        ) {
-                            HomeScreen(
-                                navController
-                            )
-                        }
-                        composable(
-                            Screen.LoginScreen.route,
-//                            enterTransition = {
-//                                return@composable scaleIn(
-//                                    spring(
-//                                        Spring.DampingRatioHighBouncy,
-//                                        stiffness = Spring.StiffnessLow
-//                                    )
-//                                )
-//                            },
-//                            exitTransition = {
-//                                return@composable scaleOut(
-//                                    spring(
-//                                        Spring.DampingRatioHighBouncy,
-//                                        stiffness = Spring.StiffnessLow
-//                                    )
-//                                )
-//                            }
-                        ) {
-                            LoginScreen(navController)
-                        }
-                        composable(
-                            Screen.SignUpScreen.route,
-//                            enterTransition = {
-//                                return@composable slideIntoContainer(
-//                                    AnimatedContentTransitionScope.SlideDirection.End,
-//                                    tween(700)
-//                                )
-//                            },
-//                            exitTransition = {
-//                                return@composable slideOutOfContainer(
-//                                    AnimatedContentTransitionScope.SlideDirection.Start,
-//                                    tween(700)
-//                                )
-//                            },
-                        ) {
-                            SignUpScreen(navController)
-                        }
-                        composable(Screen.FavoritesScreen.route, enterTransition = {
-                            fadeIn(animationSpec = tween(300))
-                        },
-                            exitTransition = {
-                                fadeOut(animationSpec = tween(300))
-                            }) {
-                            FavoriteScreen(
-                                navController
-                            )
-                        }
-                        composable(Screen.NotificationsScreen.route, enterTransition = {
-                            fadeIn(animationSpec = tween(300))
-                        },
-                            exitTransition = {
-                                fadeOut(animationSpec = tween(300))
-                            }) {
-                            NotificationScreen(
-                                navController
-                            )
-                        }
-                        composable(Screen.ProfileScreen.route, enterTransition = {
-                            fadeIn(animationSpec = tween(300))
-                        },
-                            exitTransition = {
-                                fadeOut(animationSpec = tween(300))
-                            }) {
-                            ProfileScreen(
-                                navController
-                            )
-                        }
-                        composable(
-                            Screen.ProductDetailScreen.route + "/{productId}",
-                            arguments = listOf(
-                                navArgument("productId") {
-                                    type = NavType.IntType
+                            composable(
+                                Screen.SplashScreen.route,
+                                enterTransition = {
+                                    return@composable scaleIn(
+                                        animationSpec = tween(1000),
+                                        initialScale = 0.5f
+                                    )
                                 }
-                            ),
-                            enterTransition = {
-                                fadeIn(animationSpec = tween(300))
-                            },
-                            exitTransition = {
-                                fadeOut(animationSpec = tween(300))
+                            ) {
+                                SplashScreen(navController)
                             }
-                        ) {
-                            val productId = it.arguments?.getInt("productId")
-                            Log.d(
-                                "Navigation",
-                                "Navigating to ${Screen.ProductDetailScreen.route}/$productId"
-                            )
-                            ProductDetailScreen(
-                                navController = navController
-                            )
-                        }
-                        composable(
-                            route = Screen.CartScreen.route,
-                            enterTransition = {
-                                fadeIn(animationSpec = tween(300))
-                            },
-                            exitTransition = {
-                                fadeOut(animationSpec = tween(300))
-                            }
-                        ) {
-                            CartScreen(
-                                navController = navController
-                            )
-                        }
-
-                        composable(
-                            route = Screen.CheckoutScreen.route + "/{total}",
-                            arguments = listOf(
-                                navArgument("total") {
-                                    type = NavType.FloatType
+                            composable(
+                                Screen.OnboardingScreen.route,
+                                enterTransition = {
+                                    return@composable slideInHorizontally(
+                                        animationSpec = spring(
+                                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                                            stiffness = Spring.StiffnessLow
+                                        ),
+                                        initialOffsetX = { -it }
+                                    )
+                                },
+                                exitTransition = {
+                                    return@composable fadeOut(tween(1000))
                                 }
-                            ),
-                            enterTransition = {
+                            ) {
+                                OnboardingScreen(navController)
+                            }
+                            composable(Screen.HomeScreen.route,
+                                enterTransition = {
+                                    fadeIn(animationSpec = tween(300))
+                                },
+                                exitTransition = {
+                                    fadeOut(animationSpec = tween(300))
+                                }
+                            ) {
+                                HomeScreen(
+                                    navController
+                                )
+                            }
+                            composable(
+                                Screen.LoginScreen.route,
+                            ) {
+                                LoginScreen(navController)
+                            }
+                            composable(
+                                Screen.SignUpScreen.route,
+                            ) {
+                                SignUpScreen(navController)
+                            }
+                            composable(Screen.FavoritesScreen.route, enterTransition = {
                                 fadeIn(animationSpec = tween(300))
                             },
-                            exitTransition = {
-                                fadeOut(animationSpec = tween(300))
+                                exitTransition = {
+                                    fadeOut(animationSpec = tween(300))
+                                }) {
+                                FavoriteScreen(
+                                    navController
+                                )
                             }
-                        ) {
-                            val totalPrice = it.arguments?.getFloat("total")
-                            Log.d(
-                                "Navigation",
-                                "Navigating to ${Screen.CheckoutScreen.route}/$totalPrice"
-                            )
-                            CheckoutScreen(navController = navController)
-                        }
+                            composable(Screen.NotificationsScreen.route, enterTransition = {
+                                fadeIn(animationSpec = tween(300))
+                            },
+                                exitTransition = {
+                                    fadeOut(animationSpec = tween(300))
+                                }) {
+                                NotificationScreen(
+                                    navController
+                                )
+                            }
+                            composable(Screen.ProfileScreen.route, enterTransition = {
+                                fadeIn(animationSpec = tween(300))
+                            },
+                                exitTransition = {
+                                    fadeOut(animationSpec = tween(300))
+                                }) {
+                                ProfileScreen(
+                                    navController
+                                )
+                            }
+                            composable(
+                                Screen.ProductDetailScreen.route + "/{productId}",
+                                arguments = listOf(
+                                    navArgument("productId") {
+                                        type = NavType.IntType
+                                    }
+                                ),
+                                enterTransition = {
+                                    fadeIn(animationSpec = tween(300))
+                                },
+                                exitTransition = {
+                                    fadeOut(animationSpec = tween(300))
+                                }
+                            ) {
+                                val productId = it.arguments?.getInt("productId")
+                                Log.d(
+                                    "Navigation",
+                                    "Navigating to ${Screen.ProductDetailScreen.route}/$productId"
+                                )
+                                ProductDetailScreen(
+                                    navController = navController
+                                )
+                            }
+                            composable(
+                                route = Screen.CartScreen.route,
+                                enterTransition = {
+                                    fadeIn(animationSpec = tween(300))
+                                },
+                                exitTransition = {
+                                    fadeOut(animationSpec = tween(300))
+                                }
+                            ) {
+                                CartScreen(
+                                    navController = navController
+                                )
+                            }
 
+                            composable(
+                                route = Screen.CheckoutScreen.route + "/{total}",
+                                arguments = listOf(
+                                    navArgument("total") {
+                                        type = NavType.FloatType
+                                    }
+                                ),
+                                enterTransition = {
+                                    fadeIn(animationSpec = tween(300))
+                                },
+                                exitTransition = {
+                                    fadeOut(animationSpec = tween(300))
+                                }
+                            ) {
+                                val totalPrice = it.arguments?.getFloat("total")
+                                Log.d(
+                                    "Navigation",
+                                    "Navigating to ${Screen.CheckoutScreen.route}/$totalPrice"
+                                )
+                                CheckoutScreen()
+                            }
+
+                        }
                     }
                 }
             }

@@ -1,5 +1,6 @@
 [versions]
 agp = "8.4.1"
+animation = "1.7.0-beta01"
 coilBom = "2.4.0"
 coilCompose = "2.6.0"
 constraintlayoutCompose = "1.1.0-alpha13"
@@ -34,6 +35,7 @@ evVersion = "1.0.4"
 composeAnimation = "1.7.0-alpha07"
 
 [libraries]
+androidx-animation-v170beta01 = { module = "androidx.compose.animation:animation", version.ref = "animation" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }

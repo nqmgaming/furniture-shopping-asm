@@ -1,5 +1,7 @@
 package com.nqmgaming.furniture.presentation.main.home.components
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,6 +35,7 @@ import com.nqmgaming.furniture.ui.theme.GreyText
 import com.nqmgaming.furniture.ui.theme.WhiteText
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun ProductCard(
     modifier: Modifier = Modifier,
@@ -40,81 +43,81 @@ fun ProductCard(
     onAddToCart: (Product) -> Unit,
     onProductClick: (Product) -> Unit = {},
 ) {
-    Column {
-        Box(
-            modifier = modifier
-                .background(
-                    Color.White,
-                    shape = RoundedCornerShape(10.dp)
+        Column {
+            Box(
+                modifier = modifier
+                    .background(
+                        Color.White,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .clickable {
+                        onProductClick(product)
+                    },
+                contentAlignment = Alignment.CenterStart
+            ) {
+                AsyncImage(
+                    model = product.images.first(),
+                    contentDescription = product.name,
+                    modifier = Modifier
+                        .height(250.dp)
+                        .width(160.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                    ,
+                    contentScale = ContentScale.Crop,
+                    clipToBounds = true
                 )
-                .clickable {
-                    onProductClick(product)
-                },
-            contentAlignment = Alignment.CenterStart
-        ) {
-            AsyncImage(
-                model = product.images.first(),
-                contentDescription = product.name,
+
+                Box(
+                    modifier = Modifier
+                        .width(50.dp)
+                        .height(50.dp)
+                        .padding(10.dp)
+                        .align(Alignment.BottomEnd)
+                        .background(
+                            color = GreyText,
+                            shape = RoundedCornerShape(10.dp)
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_shopping_bag),
+                        contentDescription = stringResource(
+                            id = R.string.add_to_cart
+                        ),
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable {
+                                onAddToCart(product)
+                            },
+                        tint = WhiteText
+                    )
+                }
+            }
+            Text(
+                text = product.name, style = TextStyle(
+                    fontFamily = nunitoSansFont,
+                    color = GreyText,
+                    fontSize = 16.sp,
+                    lineHeight = 20.sp,
+                    fontWeight = FontWeight.Bold
+                ),
                 modifier = Modifier
-                    .height(250.dp)
-                    .width(160.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                ,
-                contentScale = ContentScale.Crop,
-                clipToBounds = true
+                    .padding(vertical = 10.dp),
+                textAlign = TextAlign.Start,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = "$ ${product.price}.00", style = TextStyle(
+                    fontFamily = nunitoSansFont,
+                    color = BlackText,
+                    fontSize = 14.sp,
+                    lineHeight = 20.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                textAlign = TextAlign.Start,
+                modifier = Modifier.padding(bottom = 20.dp)
             )
 
-            Box(
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-                    .padding(10.dp)
-                    .align(Alignment.BottomEnd)
-                    .background(
-                        color = GreyText,
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_shopping_bag),
-                    contentDescription = stringResource(
-                        id = R.string.add_to_cart
-                    ),
-                    modifier = Modifier
-                        .size(20.dp)
-                        .clickable {
-                            onAddToCart(product)
-                        },
-                    tint = WhiteText
-                )
-            }
         }
-        Text(
-            text = product.name, style = TextStyle(
-                fontFamily = nunitoSansFont,
-                color = GreyText,
-                fontSize = 16.sp,
-                lineHeight = 20.sp,
-                fontWeight = FontWeight.Bold
-            ),
-            modifier = Modifier
-                .padding(vertical = 10.dp),
-            textAlign = TextAlign.Start,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        Text(
-            text = "$ ${product.price}.00", style = TextStyle(
-                fontFamily = nunitoSansFont,
-                color = BlackText,
-                fontSize = 14.sp,
-                lineHeight = 20.sp,
-                fontWeight = FontWeight.Bold
-            ),
-            textAlign = TextAlign.Start,
-            modifier = Modifier.padding(bottom = 20.dp)
-        )
-
     }
-}
