@@ -39,4 +39,9 @@
     <string name="remove_cart">Remove Cart</string>
     <string name="title_activity_onboarding">OnboardingActivity</string>
     <string name="password_toggle">Toggle password</string>
+    <string name="back">Back</string>
+    <string name="checkout">Check out</string>
+    <string name="edit">Edit</string>
+    <string name="card">Card</string>
+    <string name="delivery">Delivery</string>
 </resources>
