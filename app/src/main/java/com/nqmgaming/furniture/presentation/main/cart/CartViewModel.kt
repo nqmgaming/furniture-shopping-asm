@@ -3,6 +3,7 @@ package com.nqmgaming.furniture.presentation.main.cart
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,6 +22,7 @@ import com.nqmgaming.furniture.util.SharedPrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -222,6 +224,7 @@ class CartViewModel @Inject constructor(
             _cartList.value.forEach {
                 removeCartItem(it.cartId.toString(), it)
             }
+            _cartList.update { emptyList() }
         }
     }
 

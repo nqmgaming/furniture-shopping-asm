@@ -1,6 +1,5 @@
 package com.nqmgaming.furniture.presentation.main.checkout
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,30 +12,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
+import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.cart.CartViewModel
 import com.nqmgaming.furniture.presentation.main.checkout.components.AddressItem
 import com.nqmgaming.furniture.presentation.main.checkout.components.DeliveryItem
@@ -48,7 +49,7 @@ import com.nqmgaming.furniture.ui.theme.PrimaryColor
 import com.nqmgaming.furniture.ui.theme.WhiteText
 import com.nqmgaming.furniture.ui.theme.gelasioFont
 import com.nqmgaming.furniture.ui.theme.nunitoSansBoldFont
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun CheckoutScreen(
@@ -59,17 +60,9 @@ fun CheckoutScreen(
 
     val navigate by checkoutViewModel.navigate.collectAsState(initial = false)
 
-    val context = LocalContext.current
-    LaunchedEffect(true) {
-        checkoutViewModel.navigate.collectLatest { navigate ->
-            if (navigate) {
-                Toast.makeText(context, "Order Placed", Toast.LENGTH_SHORT).show()
-            } else {
+    var isLoading by remember { mutableStateOf(false) }
 
-            }
-        }
-    }
-
+    val scope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -80,6 +73,7 @@ fun CheckoutScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -129,14 +123,14 @@ fun CheckoutScreen(
                 Spacer(modifier = Modifier.size(20.dp))
             }
             item {
-              PaymentItem()
+                PaymentItem()
             }
             item {
                 Spacer(modifier = Modifier.size(20.dp))
             }
             // Delivery Method
             item {
-               DeliveryItem()
+                DeliveryItem()
             }
 
             // Order Summary
@@ -306,6 +300,7 @@ fun CheckoutScreen(
                         .fillMaxWidth()
                         .padding(16.dp)
                         .clickable {
+                            isLoading = true
                             checkoutViewModel.onTotalChange(
                                 total = cartViewModel.onGetAllTotal()
                             )
@@ -327,6 +322,8 @@ fun CheckoutScreen(
                             cartViewModel.onRemoveAllFromCart()
 
                             checkoutViewModel.onCreateOrder()
+
+                            isLoading = false
 
                         },
                     colors = CardDefaults.cardColors(
@@ -357,5 +354,63 @@ fun CheckoutScreen(
                 }
             }
         }
+
+        if (navigate){
+            AlertDialog(
+                onDismissRequest = {
+                    scope.launch {
+                        checkoutViewModel.onNavigateChange()
+                        navController.popBackStack()
+                        navController.popBackStack()
+                    }
+                },
+                title = {
+                    Text(
+                        text = "Order Placed",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                            lineHeight = 20.sp,
+                            fontFamily = nunitoSansBoldFont,
+                            color = BlackText
+                        )
+                    )
+                },
+                text = {
+                    Text(
+                        text = "Your order has been placed successfully",
+                        style = TextStyle(
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Normal,
+                            lineHeight = 20.sp,
+                            fontFamily = nunitoSansBoldFont,
+                            color = GreyText
+                        )
+                    )
+                },
+                confirmButton = {
+                    IconButton(
+                        onClick = {
+                            scope.launch {
+                                checkoutViewModel.onNavigateChange()
+                                navController.navigate(Screen.CheckoutSuccessScreen.route)
+                            }
+                        }
+                    ) {
+                        Text(
+                            text = "OK",
+                            style = TextStyle(
+                                fontSize = 15.sp,
+                                fontWeight = FontWeight.Bold,
+                                lineHeight = 20.sp,
+                                fontFamily = nunitoSansBoldFont,
+                                color = PrimaryColor
+                            )
+                        )
+                    }
+                },
+            )
+        }
     }
+
 }

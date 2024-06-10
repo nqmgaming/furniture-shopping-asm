@@ -2,6 +2,7 @@ package com.nqmgaming.furniture.presentation.main.checkout_success
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,7 +25,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
+import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.ui.theme.BlackText
 import com.nqmgaming.furniture.ui.theme.PrimaryColor
 import com.nqmgaming.furniture.ui.theme.WhiteText
@@ -33,7 +36,10 @@ import com.nqmgaming.furniture.ui.theme.nunitoSansBoldFont
 import com.nqmgaming.furniture.ui.theme.nunitoSansFont
 
 @Composable
-fun CheckoutSuccessScreen(modifier: Modifier = Modifier) {
+fun CheckoutSuccessScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -121,7 +127,16 @@ fun CheckoutSuccessScreen(modifier: Modifier = Modifier) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .clickable {
+                        navController.navigate(Screen.HomeScreen.route){
+                            popUpTo(Screen.MainScreen.route){
+                                inclusive = true
+                            }
+                            launchSingleTop = true
+                        }
+                    }
+                ,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
@@ -138,10 +153,4 @@ fun CheckoutSuccessScreen(modifier: Modifier = Modifier) {
         }
     }
 
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun CheckoutSuccessScreenPreview() {
-    CheckoutSuccessScreen()
 }

@@ -73,6 +73,7 @@ import com.nqmgaming.furniture.presentation.authentication.signup.SignUpScreen
 import com.nqmgaming.furniture.presentation.authentication.splash.SplashScreen
 import com.nqmgaming.furniture.presentation.main.cart.CartScreen
 import com.nqmgaming.furniture.presentation.main.checkout.CheckoutScreen
+import com.nqmgaming.furniture.presentation.main.checkout_success.CheckoutSuccessScreen
 import com.nqmgaming.furniture.presentation.main.favorite.FavoriteScreen
 import com.nqmgaming.furniture.presentation.main.home.HomeScreen
 import com.nqmgaming.furniture.presentation.main.notification.NotificationScreen
@@ -266,6 +267,17 @@ class MainActivity : ComponentActivity() {
                                     "Navigating to ${Screen.CheckoutScreen.route}/$totalPrice"
                                 )
                                 CheckoutScreen(navController = navController)
+                            }
+                            composable(
+                                route = Screen.CheckoutSuccessScreen.route,
+                                enterTransition = {
+                                    fadeIn(animationSpec = tween(300))
+                                },
+                                exitTransition = {
+                                    fadeOut(animationSpec = tween(300))
+                                }
+                            ) {
+                                CheckoutSuccessScreen(navController = navController)
                             }
 
                         }

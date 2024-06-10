@@ -20,7 +20,7 @@ import javax.inject.Inject
 class CheckoutViewModel @Inject constructor(
     private val createOrderUseCase: CreateOrderUseCase,
     application: Application
-):AndroidViewModel(application) {
+) : AndroidViewModel(application) {
 
     private val canNavigate = Channel<Boolean>()
     val navigate = canNavigate.receiveAsFlow()
@@ -60,6 +60,10 @@ class CheckoutViewModel @Inject constructor(
 
     fun onProductIdChange(productId: List<Int>) {
         _productId.value = productId
+    }
+
+    suspend fun onNavigateChange() {
+        canNavigate.send(false)
     }
 
     fun onCreateOrder() {
