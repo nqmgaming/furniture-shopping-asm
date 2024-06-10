@@ -15,17 +15,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.nqmgaming.furniture.R
+import com.nqmgaming.furniture.domain.model.notification.Notification
+import com.nqmgaming.furniture.presentation.main.notification.components.NotificationItem
 import com.nqmgaming.furniture.ui.theme.PrimaryColor
 import com.nqmgaming.furniture.ui.theme.gelasioFont
 
 @Composable
-fun NotificationScreen(navController: NavController = rememberNavController()) {
+fun NotificationScreen(navController: NavController) {
     LazyColumn(
         modifier = Modifier.padding(horizontal = 16.dp)
     ) {
@@ -64,14 +64,20 @@ fun NotificationScreen(navController: NavController = rememberNavController()) {
 
         }
 
-        item {
+        repeat(10){
+            item {
+                NotificationItem(
+                    notification = Notification(
+                        userId = "1",
+                        productId = "1",
+                        title = "Title",
+                        message = "Message",
+                        image = " https://res.cloudinary.com/ddqearyoe/image/upload/v1716285544/furniture/wynjcugyplftedzguo7e.png"
 
+                    )
+
+                )
+            }
         }
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun NotificationScreenPreview() {
-    NotificationScreen()
 }

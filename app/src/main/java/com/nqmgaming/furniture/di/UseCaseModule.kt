@@ -24,7 +24,9 @@ import com.nqmgaming.furniture.domain.usecase.impl.user.GetUserInfoUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.user.LogInUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.user.SignUpUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.favorite.UpdateFavoritesUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.impl.order.CreateOrderUseCaseImpl
 import com.nqmgaming.furniture.domain.usecase.impl.user.CreateUserUseCaseImpl
+import com.nqmgaming.furniture.domain.usecase.order.CreateOrderUseCase
 import com.nqmgaming.furniture.domain.usecase.user.CreateUserUseCase
 import dagger.Binds
 import dagger.Module
@@ -34,6 +36,10 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 @Module
 abstract class UseCaseModule {
+
+    // This is the part for the order use cases
+    @Binds
+    abstract fun bindAddOrderUseCase(impl: CreateOrderUseCaseImpl): CreateOrderUseCase
 
     // This is the part for the cart use cases
 

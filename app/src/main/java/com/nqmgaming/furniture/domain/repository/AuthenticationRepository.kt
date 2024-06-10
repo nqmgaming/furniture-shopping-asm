@@ -1,4 +1,4 @@
-package com.nqmgaming.furniture.data.repository
+package com.nqmgaming.furniture.domain.repository
 
 import com.nqmgaming.furniture.data.network.dto.UserDto
 

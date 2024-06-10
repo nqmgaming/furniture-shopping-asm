@@ -1,6 +1,6 @@
 package com.nqmgaming.furniture.domain.usecase.impl.product
 
-import com.nqmgaming.furniture.data.repository.ProductRepository
+import com.nqmgaming.furniture.domain.repository.ProductRepository
 import com.nqmgaming.furniture.domain.usecase.product.GetProductByIdUseCase
 import javax.inject.Inject
 

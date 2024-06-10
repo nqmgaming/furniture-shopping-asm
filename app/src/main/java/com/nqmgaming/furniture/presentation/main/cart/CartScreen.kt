@@ -123,6 +123,29 @@ fun CartScreen(
                 }
             }
 
+            if (cartList.isEmpty()) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Your cart is empty",
+                            style = TextStyle(
+                                color = BlackText,
+                                fontSize = 20.sp,
+                                lineHeight = 24.sp,
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = nunitoSansFont
+                            )
+                        )
+                    }
+                }
+            }
+
             items(cartList.size) { index ->
                 val cartItem = cartList[index]
                 CartItem(
@@ -301,7 +324,8 @@ fun CartScreen(
                         )
                     )
                 },
-                contentPadding = PaddingValues(15.dp)
+                contentPadding = PaddingValues(15.dp),
+                enabled = cartList.isNotEmpty()
             )
 
         }

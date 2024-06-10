@@ -1,13 +1,11 @@
-package com.nqmgaming.furniture.data.repository.impl
+package com.nqmgaming.furniture.data.repository
 
-import com.nqmgaming.furniture.data.network.dto.CartDto
 import com.nqmgaming.furniture.data.network.dto.UserDto
-import com.nqmgaming.furniture.data.repository.AuthenticationRepository
+import com.nqmgaming.furniture.domain.repository.AuthenticationRepository
 import io.github.jan.supabase.gotrue.Auth
 import javax.inject.Inject
 import io.github.jan.supabase.gotrue.providers.builtin.Email
 import io.github.jan.supabase.postgrest.Postgrest
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import java.util.UUID

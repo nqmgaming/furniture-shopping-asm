@@ -4,8 +4,8 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.nqmgaming.furniture.domain.mapper.asDomainModel
-import com.nqmgaming.furniture.domain.mapper.asDtoModel
+import com.nqmgaming.furniture.data.mapper.asDomainModel
+import com.nqmgaming.furniture.data.mapper.asDtoModel
 import com.nqmgaming.furniture.domain.model.favorite.Favorite
 import com.nqmgaming.furniture.domain.model.product.Product
 import com.nqmgaming.furniture.domain.usecase.favorite.GetFavoritesUseCase

@@ -1,7 +1,7 @@
-package com.nqmgaming.furniture.data.repository.impl
+package com.nqmgaming.furniture.data.repository
 
 import com.nqmgaming.furniture.data.network.dto.ProductDto
-import com.nqmgaming.furniture.data.repository.ProductRepository
+import com.nqmgaming.furniture.domain.repository.ProductRepository
 import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.postgrest.query.Columns
 import kotlinx.coroutines.Dispatchers

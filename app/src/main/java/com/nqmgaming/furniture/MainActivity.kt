@@ -265,7 +265,7 @@ class MainActivity : ComponentActivity() {
                                     "Navigation",
                                     "Navigating to ${Screen.CheckoutScreen.route}/$totalPrice"
                                 )
-                                CheckoutScreen()
+                                CheckoutScreen(navController = navController)
                             }
 
                         }

@@ -44,4 +44,8 @@
     <string name="edit">Edit</string>
     <string name="card">Card</string>
     <string name="delivery">Delivery</string>
+    <string name="success">Success</string>
+    <string name="your_order_will_be_delivered_soon">Your order will be delivered soon.\nThank you for choosing our app!</string>
+    <string name="track_your_order">Track your order</string>
+    <string name="back_to_home">Back to home</string>
 </resources>

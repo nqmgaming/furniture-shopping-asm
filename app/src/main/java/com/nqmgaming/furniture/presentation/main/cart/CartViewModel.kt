@@ -6,8 +6,8 @@ import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.nqmgaming.furniture.domain.mapper.asDomainModel
-import com.nqmgaming.furniture.domain.mapper.asDtoModel
+import com.nqmgaming.furniture.data.mapper.asDomainModel
+import com.nqmgaming.furniture.data.mapper.asDtoModel
 import com.nqmgaming.furniture.domain.model.cart.Cart
 import com.nqmgaming.furniture.domain.model.product.Product
 import com.nqmgaming.furniture.domain.usecase.cart.AddCartUseCase
@@ -109,11 +109,8 @@ class CartViewModel @Inject constructor(
             )
         )
         if (result is RemoveCartItemUseCase.Output.Success) {
-
             _cartList.value = _cartList.value.filter { it.cartId != cartId.toInt() }
             _total.value -= cart.product.price * cart.quantity
-
-            Toast.makeText(getApplication(), "Item removed from cart", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -201,11 +198,31 @@ class CartViewModel @Inject constructor(
                 // Update total price
                 _total.value += product.price * quantity
 
-            }
-            else if (result is AddCartUseCase.Output.Error)
-                Toast.makeText(getApplication(), "Item already in cart error", Toast.LENGTH_SHORT).show()
+            } else if (result is AddCartUseCase.Output.Error)
+                Toast.makeText(getApplication(), "Item already in cart error", Toast.LENGTH_SHORT)
+                    .show()
         }
 
+    }
+
+    fun onGetAllQuantity(): Int {
+        return _cartList.value.sumOf { it.quantity }
+    }
+
+    fun onGetAllTotal(): Int {
+        return _cartList.value.sumOf { it.product.price * it.quantity }
+    }
+
+    fun onGetAllProductId(): List<Int> {
+        return _cartList.value.map { it.product.productId }
+    }
+
+    fun onRemoveAllFromCart() {
+        viewModelScope.launch {
+            _cartList.value.forEach {
+                removeCartItem(it.cartId.toString(), it)
+            }
+        }
     }
 
 

@@ -1,6 +1,6 @@
 package com.nqmgaming.furniture.domain.usecase.impl.cart
 
-import com.nqmgaming.furniture.data.repository.CartRepository
+import com.nqmgaming.furniture.domain.repository.CartRepository
 import com.nqmgaming.furniture.domain.usecase.cart.AddCartUseCase
 import javax.inject.Inject
 
