@@ -88,16 +88,17 @@ class CheckoutViewModel @Inject constructor(
         }
     }
 
-    fun onCreateNotification(message: String, title: String, productId: Int) {
+    fun onCreateNotification(message: String, title: String) {
         viewModelScope.launch {
-            val notification = NotificationDto(
-                userId = userId,
-                message = message,
-                title = title,
-                productId = productId
-            )
-            val result = notificationRepository.createNotification(notification)
-            Log.d("CheckoutViewModel", "onCreateNotification: $result")
+            for (i in _productId.value) {
+                val notification = NotificationDto(
+                    userId = userId,
+                    message = message,
+                    title = title,
+                    productId = i
+                )
+                notificationRepository.createNotification(notification)
+            }
         }
     }
 

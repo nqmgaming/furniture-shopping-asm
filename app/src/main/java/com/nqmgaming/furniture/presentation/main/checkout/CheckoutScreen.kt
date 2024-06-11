@@ -1,5 +1,6 @@
 package com.nqmgaming.furniture.presentation.main.checkout
 
+import android.Manifest
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -36,6 +39,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.cart.CartViewModel
@@ -49,8 +55,10 @@ import com.nqmgaming.furniture.core.theme.PrimaryColor
 import com.nqmgaming.furniture.core.theme.WhiteText
 import com.nqmgaming.furniture.core.theme.gelasioFont
 import com.nqmgaming.furniture.core.theme.nunitoSansBoldFont
+import com.nqmgaming.furniture.util.NotificationHandler
 import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CheckoutScreen(
     navController: NavController,
@@ -67,7 +75,20 @@ fun CheckoutScreen(
     val total = cartViewModel.onGetAllTotal()
     val discount = (total * 0.1).toInt()
     val finalTotal = total - discount
+    val context = LocalContext.current
+    val postNotificationPermission =
+        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
 
+    LaunchedEffect(key1 = true) {
+        if (!postNotificationPermission.status.isGranted) {
+            postNotificationPermission.launchPermissionRequest()
+        }
+
+    }
+    var titleNotification by remember { mutableStateOf("Order Placed") }
+    var messageNotification by remember { mutableStateOf("Your order has been placed successfully") }
+    val notificationHandler = NotificationHandler(context)
+    notificationHandler.showSimpleNotification()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -328,19 +349,15 @@ fun CheckoutScreen(
                                 productId = cartViewModel.onGetAllProductId()
                             )
 
+                            checkoutViewModel.onCreateNotification(
+                                title = "Order Placed",
+                                message = "Your order has been placed successfully"
+                            )
+
                             cartViewModel.onRemoveAllFromCart()
 
 
                             checkoutViewModel.onCreateOrder()
-
-                            // create Notification
-                            for (i in cartViewModel.onGetAllProductId()) {
-                                checkoutViewModel.onCreateNotification(
-                                    "Order has been placed",
-                                    "Order",
-                                    i
-                                )
-                            }
 
                             isLoading = false
 

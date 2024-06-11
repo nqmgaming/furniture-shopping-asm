@@ -1,5 +1,6 @@
 package com.nqmgaming.furniture.presentation.main.home
 
+import android.Manifest
 import android.content.Intent
 import android.content.res.Configuration
 import android.util.Log
@@ -18,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -38,6 +40,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.cart.CartViewModel
@@ -49,6 +54,7 @@ import com.nqmgaming.furniture.core.theme.gelasioFont
 import com.nqmgaming.furniture.core.theme.merriweatherFont
 import com.nqmgaming.furniture.util.TwiceBackHandler
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun HomeScreen(
     navController: NavController,
@@ -56,6 +62,14 @@ fun HomeScreen(
     cartViewModel: CartViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val postNotificationPermission =
+        rememberPermissionState(permission = Manifest.permission.POST_NOTIFICATIONS)
+
+    LaunchedEffect(key1 = true) {
+        if (!postNotificationPermission.status.isGranted) {
+            postNotificationPermission.launchPermissionRequest()
+        }
+    }
     TwiceBackHandler(
         onFirstBack = {
             Toast.makeText(context, "Press again to exit", Toast.LENGTH_SHORT).show()

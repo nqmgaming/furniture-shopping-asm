@@ -137,4 +137,6 @@ dependencies {
 
     debugImplementation ("com.squareup.leakcanary:leakcanary-android:2.14")
 
+    implementation("com.google.accompanist:accompanist-permissions:0.31.1-alpha")
+
 }
