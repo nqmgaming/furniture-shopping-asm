@@ -15,19 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.automirrored.filled.Logout
-import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -47,17 +39,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.R.drawable
 import com.nqmgaming.furniture.core.components.AlertDialogComponent
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.profile.componets.ItemProfile
 import com.nqmgaming.furniture.core.theme.BlackText
-import com.nqmgaming.furniture.core.theme.GreyLight
-import com.nqmgaming.furniture.core.theme.GreyText
 import com.nqmgaming.furniture.core.theme.PrimaryColor
-import com.nqmgaming.furniture.core.theme.WhiteText
 import com.nqmgaming.furniture.core.theme.gelasioFont
 import com.nqmgaming.furniture.core.theme.nunitoSansFont
 import com.nqmgaming.furniture.util.SharedPrefUtils
@@ -66,6 +54,9 @@ import com.nqmgaming.furniture.util.SharedPrefUtils
 fun ProfileScreen(navController: NavController = rememberNavController()) {
     val openAlertDialog = remember { mutableStateOf(false) }
     val context = LocalContext.current
+
+    val email = SharedPrefUtils.getString(context, "email")
+    val name = SharedPrefUtils.getString(context, "name")
 
     LazyColumn(
         modifier = Modifier.padding(start = 16.dp, end = 16.dp)
@@ -135,7 +126,7 @@ fun ProfileScreen(navController: NavController = rememberNavController()) {
                 Spacer(modifier = Modifier.width(20.dp))
                 Column {
                     Text(
-                        text = "Bruno Pham", style = TextStyle(
+                        text = "$name", style = TextStyle(
                             fontFamily = nunitoSansFont,
                             color = BlackText,
                             fontSize = 20.sp,
@@ -149,7 +140,7 @@ fun ProfileScreen(navController: NavController = rememberNavController()) {
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = "bruno203@gmail.com", style = TextStyle(
+                        text = "$email", style = TextStyle(
                             fontFamily = nunitoSansFont,
                             color = BlackText,
                             fontSize = 14.sp,

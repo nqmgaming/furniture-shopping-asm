@@ -29,6 +29,7 @@ class CanceledViewModel @Inject constructor(
     fun getOrders() {
         viewModelScope.launch {
             _orders.value = orderRepository.getOrders(userId)
+            _orders.value = _orders.value.filter { it.status == "Canceled" }
         }
     }
 

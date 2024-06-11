@@ -26,6 +26,14 @@ fun CanceledScreen(
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
+        item {
+            if (orders.value.isEmpty()) {
+                Text(
+                    text = "No orders found",
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+        }
         items(orders.value.size) { index ->
             val order = orders.value[index]
             OrderItem(
