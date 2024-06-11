@@ -19,7 +19,6 @@ fun ProcessingScreen(
 ) {
 
     val orders = viewModel.orders.collectAsState()
-    val pagerState = rememberPagerState(pageCount = { 3 })
     LaunchedEffect(key1 = true) {
         Log.d("OrderScreen", "Orders: ${orders.value}")
     }

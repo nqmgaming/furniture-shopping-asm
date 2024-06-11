@@ -4,11 +4,11 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-05-22T07:43:47.110517Z">
+        <DropdownSelection timestamp="2024-06-11T07:45:07.938055Z">
           <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/nqmgaming/.android/avd/Pixel_7_Pro_API_34.avd" />
-            </handle>
+            <template>
+              <DeviceId pluginId="FirebaseDirectAccess" type="TEMPLATE" identifier="model_id=bluejay/32" />
+            </template>
           </Target>
         </DropdownSelection>
         <DialogSelection />
