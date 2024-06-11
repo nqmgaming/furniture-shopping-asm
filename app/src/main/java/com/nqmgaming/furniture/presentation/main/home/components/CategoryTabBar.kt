@@ -109,6 +109,4 @@ private fun CategoryItems(
             )
         }
     }
-
-
 }

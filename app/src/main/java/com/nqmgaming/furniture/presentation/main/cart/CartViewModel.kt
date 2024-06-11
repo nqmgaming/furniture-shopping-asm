@@ -1,10 +1,7 @@
 package com.nqmgaming.furniture.presentation.main.cart
 
 import android.app.Application
-import android.util.Log
 import android.widget.Toast
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.nqmgaming.furniture.data.mapper.asDomainModel
@@ -13,14 +10,11 @@ import com.nqmgaming.furniture.domain.model.cart.Cart
 import com.nqmgaming.furniture.domain.model.product.Product
 import com.nqmgaming.furniture.domain.usecase.cart.AddCartUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.DecrementQuantityCartUseCase
-import com.nqmgaming.furniture.domain.usecase.cart.GetCartByIdUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.GetCartsByUserIdUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.IncrementQuantityCartUseCase
 import com.nqmgaming.furniture.domain.usecase.cart.RemoveCartItemUseCase
-import com.nqmgaming.furniture.domain.usecase.product.GetProductByIdUseCase
 import com.nqmgaming.furniture.util.SharedPrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
