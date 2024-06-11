@@ -42,13 +42,13 @@ import com.nqmgaming.furniture.presentation.main.cart.CartViewModel
 import com.nqmgaming.furniture.presentation.main.checkout.components.AddressItem
 import com.nqmgaming.furniture.presentation.main.checkout.components.DeliveryItem
 import com.nqmgaming.furniture.presentation.main.checkout.components.PaymentItem
-import com.nqmgaming.furniture.ui.theme.BlackText
-import com.nqmgaming.furniture.ui.theme.GreyLight
-import com.nqmgaming.furniture.ui.theme.GreyText
-import com.nqmgaming.furniture.ui.theme.PrimaryColor
-import com.nqmgaming.furniture.ui.theme.WhiteText
-import com.nqmgaming.furniture.ui.theme.gelasioFont
-import com.nqmgaming.furniture.ui.theme.nunitoSansBoldFont
+import com.nqmgaming.furniture.core.theme.BlackText
+import com.nqmgaming.furniture.core.theme.GreyLight
+import com.nqmgaming.furniture.core.theme.GreyText
+import com.nqmgaming.furniture.core.theme.PrimaryColor
+import com.nqmgaming.furniture.core.theme.WhiteText
+import com.nqmgaming.furniture.core.theme.gelasioFont
+import com.nqmgaming.furniture.core.theme.nunitoSansBoldFont
 import kotlinx.coroutines.launch
 
 @Composable
@@ -63,6 +63,10 @@ fun CheckoutScreen(
     var isLoading by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
+
+    val total = cartViewModel.onGetAllTotal()
+    val discount = (total * 0.1).toInt()
+    val finalTotal = total - discount
 
     Column(
         modifier = Modifier
@@ -91,11 +95,14 @@ fun CheckoutScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_back),
                         contentDescription = stringResource(
-                            id = R.string.search
+                            id = R.string.back
                         ),
                         modifier = Modifier
                             .weight(1f)
                             .size(20.dp)
+                            .clickable {
+                                navController.navigateUp()
+                            }
                     )
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -117,7 +124,9 @@ fun CheckoutScreen(
                 }
             }
             item {
-                AddressItem()
+                AddressItem(
+                    name = checkoutViewModel.userName ?: "Not Found"
+                )
             }
             item {
                 Spacer(modifier = Modifier.size(20.dp))
@@ -198,7 +207,7 @@ fun CheckoutScreen(
                                 )
                             )
                             Text(
-                                text = "$100",
+                                text = "$${total}",
                                 style = TextStyle(
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
@@ -250,7 +259,7 @@ fun CheckoutScreen(
                                 )
                             )
                             Text(
-                                text = "-$10",
+                                text = "-$${discount}",
                                 style = TextStyle(
                                     fontSize = 15.sp,
                                     fontWeight = FontWeight.Normal,
@@ -277,7 +286,7 @@ fun CheckoutScreen(
                                 )
                             )
                             Text(
-                                text = "$90",
+                                text = "$${finalTotal}",
                                 style = TextStyle(
                                     fontSize = 18.sp,
                                     fontWeight = FontWeight.Bold,
@@ -321,7 +330,17 @@ fun CheckoutScreen(
 
                             cartViewModel.onRemoveAllFromCart()
 
+
                             checkoutViewModel.onCreateOrder()
+
+                            // create Notification
+                            for (i in cartViewModel.onGetAllProductId()) {
+                                checkoutViewModel.onCreateNotification(
+                                    "Order has been placed",
+                                    "Order",
+                                    i
+                                )
+                            }
 
                             isLoading = false
 
@@ -355,7 +374,7 @@ fun CheckoutScreen(
             }
         }
 
-        if (navigate){
+        if (navigate) {
             AlertDialog(
                 onDismissRequest = {
                     scope.launch {

@@ -4,4 +4,5 @@ import com.nqmgaming.furniture.data.network.dto.OrderDto
 
 interface OrderRepository {
     suspend fun createOrder(order: OrderDto): Boolean
+    suspend fun getOrders(userId: Int): List<OrderDto>
 }

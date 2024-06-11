@@ -28,13 +28,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.presentation.Screen
-import com.nqmgaming.furniture.ui.theme.BlackText
-import com.nqmgaming.furniture.ui.theme.GreyText
-import com.nqmgaming.furniture.ui.theme.GreyTileText
-import com.nqmgaming.furniture.ui.theme.PrimaryColor
-import com.nqmgaming.furniture.ui.theme.WhiteText
-import com.nqmgaming.furniture.ui.theme.gelasioFont
-import com.nqmgaming.furniture.ui.theme.nunitoSansFont
+import com.nqmgaming.furniture.core.theme.BlackText
+import com.nqmgaming.furniture.core.theme.GreyText
+import com.nqmgaming.furniture.core.theme.GreyTileText
+import com.nqmgaming.furniture.core.theme.PrimaryColor
+import com.nqmgaming.furniture.core.theme.WhiteText
+import com.nqmgaming.furniture.core.theme.gelasioFont
+import com.nqmgaming.furniture.core.theme.nunitoSansFont
 
 @Composable
 fun OnboardingScreen(navController: NavController) {

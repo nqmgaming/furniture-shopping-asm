@@ -37,11 +37,11 @@ import coil.compose.AsyncImage
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.domain.model.favorite.Favorite
 import com.nqmgaming.furniture.domain.model.product.Product
-import com.nqmgaming.furniture.ui.theme.BackgroundCategory
-import com.nqmgaming.furniture.ui.theme.BlackText
-import com.nqmgaming.furniture.ui.theme.GreyText
-import com.nqmgaming.furniture.ui.theme.WhiteText
-import com.nqmgaming.furniture.ui.theme.nunitoSansFont
+import com.nqmgaming.furniture.core.theme.BackgroundCategory
+import com.nqmgaming.furniture.core.theme.BlackText
+import com.nqmgaming.furniture.core.theme.GreyText
+import com.nqmgaming.furniture.core.theme.WhiteText
+import com.nqmgaming.furniture.core.theme.nunitoSansFont
 
 @Composable
 fun FavoriteCard(

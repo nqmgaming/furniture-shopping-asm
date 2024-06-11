@@ -50,16 +50,16 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.R.drawable
-import com.nqmgaming.furniture.common.components.AlertDialogComponent
+import com.nqmgaming.furniture.core.components.AlertDialogComponent
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.profile.componets.ItemProfile
-import com.nqmgaming.furniture.ui.theme.BlackText
-import com.nqmgaming.furniture.ui.theme.GreyLight
-import com.nqmgaming.furniture.ui.theme.GreyText
-import com.nqmgaming.furniture.ui.theme.PrimaryColor
-import com.nqmgaming.furniture.ui.theme.WhiteText
-import com.nqmgaming.furniture.ui.theme.gelasioFont
-import com.nqmgaming.furniture.ui.theme.nunitoSansFont
+import com.nqmgaming.furniture.core.theme.BlackText
+import com.nqmgaming.furniture.core.theme.GreyLight
+import com.nqmgaming.furniture.core.theme.GreyText
+import com.nqmgaming.furniture.core.theme.PrimaryColor
+import com.nqmgaming.furniture.core.theme.WhiteText
+import com.nqmgaming.furniture.core.theme.gelasioFont
+import com.nqmgaming.furniture.core.theme.nunitoSansFont
 import com.nqmgaming.furniture.util.SharedPrefUtils
 
 @Composable
@@ -170,7 +170,9 @@ fun ProfileScreen(navController: NavController = rememberNavController()) {
             ItemProfile(
                 title = "My Orders",
                 subtitle = "Check your orders",
-                onClick = { }
+                onClick = {
+                    navController.navigate(Screen.OrderScreen.route)
+                }
             )
         }
         item {

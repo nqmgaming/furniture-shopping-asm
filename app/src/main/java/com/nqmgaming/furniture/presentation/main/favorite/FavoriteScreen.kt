@@ -33,13 +33,13 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
-import com.nqmgaming.furniture.common.components.LoadingDialog
+import com.nqmgaming.furniture.core.components.LoadingDialog
 import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.cart.CartViewModel
 import com.nqmgaming.furniture.presentation.main.favorite.components.FavoriteCard
-import com.nqmgaming.furniture.ui.theme.PrimaryColor
-import com.nqmgaming.furniture.ui.theme.gelasioFont
-import com.nqmgaming.furniture.ui.theme.nunitoSansFont
+import com.nqmgaming.furniture.core.theme.PrimaryColor
+import com.nqmgaming.furniture.core.theme.gelasioFont
+import com.nqmgaming.furniture.core.theme.nunitoSansFont
 
 @Composable
 fun FavoriteScreen(

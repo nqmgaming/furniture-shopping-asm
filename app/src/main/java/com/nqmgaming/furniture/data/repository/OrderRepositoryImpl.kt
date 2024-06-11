@@ -18,4 +18,18 @@ class OrderRepositoryImpl @Inject constructor(
             false
         }
     }
+
+    override suspend fun getOrders(userId: Int): List<OrderDto> {
+        return try {
+            postgrest.from("Orders")
+                .select {
+                    filter {
+                        eq("user_id", userId)
+                    }
+                }.decodeList<OrderDto>()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
+    }
 }

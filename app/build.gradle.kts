@@ -135,4 +135,6 @@ dependencies {
 
     implementation(libs.androidx.animation.v170beta01)
 
+    debugImplementation ("com.squareup.leakcanary:leakcanary-android:2.14")
+
 }

@@ -28,12 +28,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.nqmgaming.furniture.R
 import com.nqmgaming.furniture.presentation.Screen
-import com.nqmgaming.furniture.ui.theme.BlackText
-import com.nqmgaming.furniture.ui.theme.PrimaryColor
-import com.nqmgaming.furniture.ui.theme.WhiteText
-import com.nqmgaming.furniture.ui.theme.merriweatherFont
-import com.nqmgaming.furniture.ui.theme.nunitoSansBoldFont
-import com.nqmgaming.furniture.ui.theme.nunitoSansFont
+import com.nqmgaming.furniture.core.theme.BlackText
+import com.nqmgaming.furniture.core.theme.PrimaryColor
+import com.nqmgaming.furniture.core.theme.WhiteText
+import com.nqmgaming.furniture.core.theme.merriweatherFont
+import com.nqmgaming.furniture.core.theme.nunitoSansBoldFont
+import com.nqmgaming.furniture.core.theme.nunitoSansFont
 
 @Composable
 fun CheckoutSuccessScreen(

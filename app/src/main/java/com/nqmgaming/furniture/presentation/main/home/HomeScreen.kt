@@ -43,10 +43,10 @@ import com.nqmgaming.furniture.presentation.Screen
 import com.nqmgaming.furniture.presentation.main.cart.CartViewModel
 import com.nqmgaming.furniture.presentation.main.home.components.CategoryTabBar
 import com.nqmgaming.furniture.presentation.main.home.components.ProductCard
-import com.nqmgaming.furniture.ui.theme.GreyLight
-import com.nqmgaming.furniture.ui.theme.PrimaryColor
-import com.nqmgaming.furniture.ui.theme.gelasioFont
-import com.nqmgaming.furniture.ui.theme.merriweatherFont
+import com.nqmgaming.furniture.core.theme.GreyLight
+import com.nqmgaming.furniture.core.theme.PrimaryColor
+import com.nqmgaming.furniture.core.theme.gelasioFont
+import com.nqmgaming.furniture.core.theme.merriweatherFont
 import com.nqmgaming.furniture.util.TwiceBackHandler
 
 @Composable

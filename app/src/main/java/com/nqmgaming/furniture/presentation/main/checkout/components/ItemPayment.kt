@@ -23,9 +23,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nqmgaming.furniture.R
-import com.nqmgaming.furniture.ui.theme.BlackText
-import com.nqmgaming.furniture.ui.theme.GreyLight
-import com.nqmgaming.furniture.ui.theme.nunitoSansBoldFont
+import com.nqmgaming.furniture.core.theme.BlackText
+import com.nqmgaming.furniture.core.theme.GreyLight
+import com.nqmgaming.furniture.core.theme.nunitoSansBoldFont
 
 @Composable
 fun PaymentItem(modifier: Modifier = Modifier) {

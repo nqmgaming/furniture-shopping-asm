@@ -23,13 +23,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nqmgaming.furniture.R
-import com.nqmgaming.furniture.ui.theme.BlackText
-import com.nqmgaming.furniture.ui.theme.GreyLight
-import com.nqmgaming.furniture.ui.theme.GreyText
-import com.nqmgaming.furniture.ui.theme.nunitoSansBoldFont
+import com.nqmgaming.furniture.core.theme.BlackText
+import com.nqmgaming.furniture.core.theme.GreyLight
+import com.nqmgaming.furniture.core.theme.GreyText
+import com.nqmgaming.furniture.core.theme.nunitoSansBoldFont
 
 @Composable
-fun AddressItem(modifier: Modifier = Modifier) {
+fun AddressItem(
+    modifier: Modifier = Modifier,
+    name: String
+) {
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -76,7 +79,7 @@ fun AddressItem(modifier: Modifier = Modifier) {
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "John Doe",
+                    text = name,
                     style = TextStyle(
                         fontSize = 18.sp,
                         fontWeight = FontWeight.ExtraBold,

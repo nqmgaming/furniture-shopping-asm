@@ -38,13 +38,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.nqmgaming.furniture.R
-import com.nqmgaming.furniture.common.components.QuantityButton
+import com.nqmgaming.furniture.core.components.QuantityButton
 import com.nqmgaming.furniture.domain.model.cart.Cart
-import com.nqmgaming.furniture.ui.theme.BackgroundCategory
-import com.nqmgaming.furniture.ui.theme.BlackText
-import com.nqmgaming.furniture.ui.theme.GreyText
-import com.nqmgaming.furniture.ui.theme.nunitoSansBoldFont
-import com.nqmgaming.furniture.ui.theme.nunitoSansFont
+import com.nqmgaming.furniture.core.theme.BackgroundCategory
+import com.nqmgaming.furniture.core.theme.BlackText
+import com.nqmgaming.furniture.core.theme.GreyText
+import com.nqmgaming.furniture.core.theme.nunitoSansBoldFont
+import com.nqmgaming.furniture.core.theme.nunitoSansFont
 
 @Composable
 fun CartItem(

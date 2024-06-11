@@ -5,10 +5,13 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.nqmgaming.furniture.data.mapper.asDtoModel
+import com.nqmgaming.furniture.data.network.dto.NotificationDto
 import com.nqmgaming.furniture.domain.model.order.Order
+import com.nqmgaming.furniture.domain.repository.NotificationRepository
 import com.nqmgaming.furniture.domain.usecase.order.CreateOrderUseCase
 import com.nqmgaming.furniture.util.SharedPrefUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CheckoutViewModel @Inject constructor(
     private val createOrderUseCase: CreateOrderUseCase,
+    private val notificationRepository: NotificationRepository,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -26,6 +30,7 @@ class CheckoutViewModel @Inject constructor(
     val navigate = canNavigate.receiveAsFlow()
 
     private val userId = SharedPrefUtils.getInt(getApplication(), "userId", 0)
+    val userName = SharedPrefUtils.getString(getApplication(), "name", "")
 
     private val _total = MutableStateFlow(0)
     val total = _total.asStateFlow()
@@ -77,7 +82,22 @@ class CheckoutViewModel @Inject constructor(
             )
             Log.d("CheckoutViewModel", "onCreateOrder: $order")
             val result = createOrderUseCase.execute(CreateOrderUseCase.Input(order.asDtoModel()))
+
+
             canNavigate.send(result.added)
+        }
+    }
+
+    fun onCreateNotification(message: String, title: String, productId: Int) {
+        viewModelScope.launch {
+            val notification = NotificationDto(
+                userId = userId,
+                message = message,
+                title = title,
+                productId = productId
+            )
+            val result = notificationRepository.createNotification(notification)
+            Log.d("CheckoutViewModel", "onCreateNotification: $result")
         }
     }
 

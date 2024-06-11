@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.core.Spring
@@ -16,9 +15,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -44,7 +41,6 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -77,9 +73,10 @@ import com.nqmgaming.furniture.presentation.main.checkout_success.CheckoutSucces
 import com.nqmgaming.furniture.presentation.main.favorite.FavoriteScreen
 import com.nqmgaming.furniture.presentation.main.home.HomeScreen
 import com.nqmgaming.furniture.presentation.main.notification.NotificationScreen
-import com.nqmgaming.furniture.presentation.main.productDetail.ProductDetailScreen
+import com.nqmgaming.furniture.presentation.main.product_detail.ProductDetailScreen
 import com.nqmgaming.furniture.presentation.main.profile.ProfileScreen
-import com.nqmgaming.furniture.ui.theme.FurnitureShoppingTheme
+import com.nqmgaming.furniture.core.theme.FurnitureShoppingTheme
+import com.nqmgaming.furniture.presentation.main.order.OrderScreen
 import com.nqmgaming.furniture.util.SharedPrefUtils
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.jan.supabase.SupabaseClient
@@ -279,6 +276,18 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 CheckoutSuccessScreen(navController = navController)
                             }
+                            composable(
+                                route = Screen.OrderScreen.route,
+                                enterTransition = {
+                                    fadeIn(animationSpec = tween(300))
+                                },
+                                exitTransition = {
+                                    fadeOut(animationSpec = tween(300))
+                                }
+                            ) {
+                                 OrderScreen(navController = navController)
+                            }
+
 
                         }
                     }
